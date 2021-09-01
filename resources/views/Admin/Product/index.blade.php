@@ -535,6 +535,15 @@
                             if(this.$refs.file.files[0]){
                                 form_data.set('image', this.$refs.file.files[0]);
                             }
+                            if(this.$refs.sub_file1.files[0]){
+                                form_data.set('image1', this.$refs.sub_file1.files[0]);
+                            }
+                            if(this.$refs.sub_file2.files[0]){
+                                form_data.set('image2', this.$refs.sub_file2.files[0]);
+                            }
+                            if(this.$refs.sub_file3.files[0]){
+                                form_data.set('image3', this.$refs.sub_file3.files[0]);
+                            }
                             form_data.set('meta_seo', JSON.stringify(this.data_create.meta_seo));
                             axios.post(vm.api_update, form_data).then(function (response) {
                                 vm.isLoading = false;

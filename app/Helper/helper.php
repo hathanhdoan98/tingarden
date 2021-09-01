@@ -22,11 +22,9 @@ function uploadFile($data = [], $is_image = false)
                 }
             }
             $args['file_name'] = !empty($data['file_name']) ? $data['file_name'] :  $data['file']->getClientOriginalName();
-            $args['file_name'] = str_replace(" ", "_", $args['file_name']);
+            $args['file_name'] = date('YmdHis') . '_' . str_replace(" ", "_", $args['file_name']);
             $args['size'] = str_replace(" ", "_", $data['file']->getSize());
             $args['ext'] = str_replace(" ", "_", $data['file']->getClientOriginalExtension());
-            $args['type'] = str_replace(" ", "_", $data['file']->getMimeType());
-            $filename = date('YmdHis') . '_' . $args['file_name'];
             if ($args['size'] > 1024 * 1024 * 10) {
                 return [
                     'status' => 200,
@@ -36,12 +34,12 @@ function uploadFile($data = [], $is_image = false)
                 ];
             }
 
-            $args['path'] = $path . '/' . $filename;
+            $args['path'] = $path . '/' . $args['file_name'];
             if(!empty($data['width']) || !empty($data['height'])){
                 $resize = resizeImage([
                     'image' => $data['file'],
                     'path' => $path,
-                    'file_name' => $filename,
+                    'file_name' => $args['file_name'],
                     'width' => $data['width'] ?? null,
                     'height' => $data['height'] ?? null,
                 ]);
@@ -54,7 +52,7 @@ function uploadFile($data = [], $is_image = false)
                     ];
                 }
             }else{
-                $data['file']->move($path, $filename);
+                $data['file']->move($path, $args['file_name']);
             }
             //optimize image
 //            try {
@@ -148,7 +146,7 @@ function resizeImage($data)
 {
     try{
         if(!empty($data['image'])){
-            $file_name = !empty($data['file_name']) ? $data['file_name'] :  $data['file']->getClientOriginalName();
+            $file_name = !empty($data['file_name']) ? $data['file_name'] :  date('YmdHis') . '_' . $data['file']->getClientOriginalName();
             $file_name = str_replace(" ", "_", $file_name);
             $image = Image::make($data['image']);
             $width = $data['width'] ?? $image->width();
@@ -160,11 +158,15 @@ function resizeImage($data)
             $image->fit($width, $height)->save($path.'/'.$file_name);
             return [
                 'success' => true,
-                'message' => ''
+                'message' => '',
+                'data' => [
+                    'path' => $path.'/'.$file_name
+                ]
             ];
         }
         return [
             'success' => false,
+            'data' => [],
             'message' => 'file không tồn tại',
         ];
 

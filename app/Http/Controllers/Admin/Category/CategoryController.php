@@ -18,7 +18,6 @@ use Intervention\Image\Facades\Image;
 class CategoryController extends Controller
 {
     use Lib;
-    protected $upload_path = "upload/images/category";
     public function index()
     {
         return view('Admin.Category.index');
@@ -89,15 +88,11 @@ class CategoryController extends Controller
             $data['status'] = 'active';
             $data['search'] = Str::slug($data['name'], ' ');
             if (isset($request->image) && !is_string($request->image) && $request->image != 'undefined') {
-                $rs_upload = uploadFile([
-                    "file" => $request->image,
-                    "path" => $this->upload_path,
-                ], true);
+                $rs_upload = $this->uploadImage($request->image);
                 if (!$rs_upload['success']) {
                     return $this->setResponse($rs_upload);
                 }
                 $data['image'] = $rs_upload['data']['path'];
-                dispatch(new OptimizeImage(getcwd().'/'.$data['image']));
             }
 
             $data_alias = $data;
@@ -203,10 +198,7 @@ class CategoryController extends Controller
         }
 
         if (!empty($request->image) &&  !is_string($request->image) && $request->image != 'undefined') {
-            $rs_upload = uploadFile([
-                "file" => $request->image,
-                "path" => $this->upload_path
-            ], true);
+            $rs_upload = $this->uploadImage($request->image);
             if (!$rs_upload['success']) {
                 return $this->setResponse($rs_upload);
             }
@@ -234,5 +226,16 @@ class CategoryController extends Controller
                'message' => 'Cập nhật thành công',
            ]
         );
+    }
+
+    protected function uploadImage($image){
+        $rs_upload = uploadFile([
+            "file" => $image,
+            "path" => "upload/images/category",
+        ], true);
+        if($rs_upload['success']){
+            dispatch(new OptimizeImage(getcwd().'/'.$rs_upload['data']['path']));
+        }
+        return $rs_upload;
     }
 }

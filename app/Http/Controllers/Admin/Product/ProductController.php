@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Product;
 use App\Http\Controllers\Traits\Lib;
 use App\Http\Requests\Category\CreateCategoryRequest;
 use App\Http\Requests\Product\CreateProductRequest;
+use App\Jobs\OptimizeImage;
 use App\Models\Alias;
 use App\Models\Category;
 use App\Http\Controllers\Controller;
@@ -17,6 +18,7 @@ use Illuminate\Support\Str;
 class ProductController extends Controller
 {
     use Lib;
+    protected $upload_path = "upload/images/product";
     public function index()
     {
         return view('Admin.Product.index');
@@ -85,7 +87,7 @@ class ProductController extends Controller
             $data['status'] = 'active';
             $data['search'] = Str::slug($data['name'], ' ');
             if (isset($request->image) && !is_string($request->image) && $request->image != 'undefined') {
-                $rs_upload = uploadFile(["file" => $request->image, "path" => "upload/images/product"]);
+                $rs_upload = $this->uploadImage($request->image);
                 if (!$rs_upload['success']) {
                     return $this->setResponse($rs_upload);
                 }
@@ -93,7 +95,7 @@ class ProductController extends Controller
             }
 
             if (isset($request->image1) && !is_string($request->image1) && $request->image1 != 'undefined') {
-                $rs_upload = uploadFile(["file" => $request->image1, "path" => "upload/images/product"]);
+                $rs_upload = $this->uploadImage($request->image1);
                 if (!$rs_upload['success']) {
                     return $this->setResponse($rs_upload);
                 }
@@ -101,7 +103,7 @@ class ProductController extends Controller
             }
 
             if (isset($request->image2) && !is_string($request->image2) && $request->image2 != 'undefined') {
-                $rs_upload = uploadFile(["file" => $request->image2, "path" => "upload/images/product"]);
+                $rs_upload = $this->uploadImage($request->image2);
                 if (!$rs_upload['success']) {
                     return $this->setResponse($rs_upload);
                 }
@@ -109,7 +111,7 @@ class ProductController extends Controller
             }
 
             if (isset($request->image3) && !is_string($request->image3) && $request->image3 != 'undefined') {
-                $rs_upload = uploadFile(["file" => $request->image3, "path" => "upload/images/product"]);
+                $rs_upload = $this->uploadImage($request->image3);
                 if (!$rs_upload['success']) {
                     return $this->setResponse($rs_upload);
                 }
@@ -219,7 +221,7 @@ class ProductController extends Controller
         }
 
         if (!empty($request->image) && !is_string($request->image) && $request->image != 'undefined') {
-            $rs_upload = uploadFile(["file" => $request->image, "path" => "upload/images/category"]);
+            $rs_upload = $this->uploadImage($request->image);
             if (!$rs_upload['success']) {
                 return $this->setResponse($rs_upload);
             }
@@ -231,7 +233,7 @@ class ProductController extends Controller
         }
 
         if (isset($request->image1) && !is_string($request->image1) && $request->image1 != 'undefined') {
-            $rs_upload = uploadFile(["file" => $request->image1, "path" => "upload/images/product"]);
+            $rs_upload = $this->uploadImage($request->image1);
             if (!$rs_upload['success']) {
                 return $this->setResponse($rs_upload);
             }
@@ -243,7 +245,7 @@ class ProductController extends Controller
         }
 
         if (isset($request->image2) && !is_string($request->image2) && $request->image2 != 'undefined') {
-            $rs_upload = uploadFile(["file" => $request->image2, "path" => "upload/images/product"]);
+            $rs_upload = $this->uploadImage($request->image2);
             if (!$rs_upload['success']) {
                 return $this->setResponse($rs_upload);
             }
@@ -255,7 +257,7 @@ class ProductController extends Controller
         }
 
         if (isset($request->image3) && !is_string($request->image3) && $request->image3 != 'undefined') {
-            $rs_upload = uploadFile(["file" => $request->image3, "path" => "upload/images/product"]);
+            $rs_upload = $this->uploadImage($request->image3);
             if (!$rs_upload['success']) {
                 return $this->setResponse($rs_upload);
             }
@@ -283,5 +285,18 @@ class ProductController extends Controller
                'message' => 'Cập nhật thành công',
            ]
         );
+    }
+
+    protected function uploadImage($image){
+        $rs_upload = uploadFile([
+            "file" => $image,
+            "path" => "upload/images/product/640x630",
+            "width" => '640',
+            "height" => '630',
+        ], true);
+        if($rs_upload['success']){
+            dispatch(new OptimizeImage(getcwd().'/'.$rs_upload['data']['path']));
+        }
+        return $rs_upload;
     }
 }
