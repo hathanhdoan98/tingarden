@@ -13,10 +13,8 @@ class Contact extends Model
         'name',
         'email',
         'phone',
-        'content',//publish,trash
+        'content',
         'status',
-        'create_at',
-        'update_at',
     ];
 
     public $timestamps = true;

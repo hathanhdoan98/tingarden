@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Log;
 use Intervention\Image\Facades\Image;
 
 function uploadFile($data = [], $is_image = false)
@@ -35,7 +37,7 @@ function uploadFile($data = [], $is_image = false)
             }
 
             $args['path'] = $path . '/' . $args['file_name'];
-            if(!empty($data['width']) || !empty($data['height'])){
+            if (!empty($data['width']) || !empty($data['height'])) {
                 $resize = resizeImage([
                     'image' => $data['file'],
                     'path' => $path,
@@ -43,7 +45,7 @@ function uploadFile($data = [], $is_image = false)
                     'width' => $data['width'] ?? null,
                     'height' => $data['height'] ?? null,
                 ]);
-                if(!$resize['success']){
+                if (!$resize['success']) {
                     return [
                         'status' => 200,
                         'message' => $resize['message'],
@@ -51,15 +53,15 @@ function uploadFile($data = [], $is_image = false)
                         'success' => false
                     ];
                 }
-            }else{
+            } else {
                 $data['file']->move($path, $args['file_name']);
             }
             //optimize image
-//            try {
-//
-//            }catch (\Exception $e){
-//
-//            }
+            //            try {
+            //
+            //            }catch (\Exception $e){
+            //
+            //            }
 
 
             return [
@@ -75,7 +77,6 @@ function uploadFile($data = [], $is_image = false)
             'data' => [],
             'success' => false
         ];
-
     } catch (Exception $e) {
         return [
             'status' => 200,
@@ -139,28 +140,27 @@ function validateImage($image, $max_size = 5)
         'success' => true,
         'message' => ''
     ];
-
 }
 
 function resizeImage($data)
 {
-    try{
-        if(!empty($data['image'])){
+    try {
+        if (!empty($data['image'])) {
             $file_name = !empty($data['file_name']) ? $data['file_name'] :  date('YmdHis') . '_' . $data['file']->getClientOriginalName();
             $file_name = str_replace(" ", "_", $file_name);
             $image = Image::make($data['image']);
             $width = $data['width'] ?? $image->width();
             $height = $data['height']  ?? $image->height();
-            $path = isset($data['path']) ? $data['path'] : '/resize/' . $width. 'x' . $height;
+            $path = isset($data['path']) ? $data['path'] : '/resize/' . $width . 'x' . $height;
             if (!is_dir(public_path($path))) {
                 mkdir(public_path($path), 0777, true);
             }
-            $image->fit($width, $height)->save($path.'/'.$file_name);
+            $image->fit($width, $height)->save($path . '/' . $file_name);
             return [
                 'success' => true,
                 'message' => '',
                 'data' => [
-                    'path' => $path.'/'.$file_name
+                    'path' => $path . '/' . $file_name
                 ]
             ];
         }
@@ -169,12 +169,91 @@ function resizeImage($data)
             'data' => [],
             'message' => 'file không tồn tại',
         ];
-
-    }catch (\Exception $e){
+    } catch (\Exception $e) {
         return [
             'success' => false,
             'message' => $e->getMessage()
         ];
     }
 }
+/**
+ * @param $file
+ * @return boolean
+ */
+function isUploadFile($file): bool
+{
+    return $file instanceof UploadedFile;
+}
 
+/**
+ * @param string $channel
+ * @param string $message
+ * @param string $level
+ * @param array $context
+ * @return void
+ */
+function writeLog(string $channel = 'stack', string $message, string $level = LOG_LEVEL_INFO, $context = []): void
+{
+    $log = Log::channel($channel);
+    $message = 'Log message: ' . $message;
+    switch ($level) {
+        case LOG_LEVEL_INFO:
+            $log->info($message, $context);
+            break;
+        case LOG_LEVEL_ERROR:
+            $log->error($message, $context);
+            break;
+        case LOG_LEVEL_DEBUG:
+            $log->debug($message, $context);
+            break;
+    }
+}
+
+/**
+ * @param string $dirty
+ * @param array|null $config
+ * @return string
+ */
+function cleanHTML(string $dirty, $config = null): string
+{
+    return app('purifier')->clean($dirty, $config);
+}
+
+/**
+ * @param string $imagePath
+ * @return string
+ */
+function renderImagePath(string $imagePath): string
+{
+    return public_path($imagePath);
+}
+
+/**
+ * @param string $column
+ * @param string $sortKey
+ * @param string $sortValue
+ * @return string
+ */
+function showClassSort(string $column, string $sortKey, string $sortValue): string
+{
+    if ($sortKey == $column) {
+        return $sortValue == 0 ? 'fa-sort-down' : 'fa-sort-up';
+    }
+    return 'fa-sort';
+}
+
+/**
+ * @param int $status
+ * @return string
+ */
+function showClassStatus(int $status): string
+{
+    switch ($status) {
+        case 0:
+            return 'bg-danger';
+        case 1:
+            return 'bg-success';
+        default:
+            return '';
+    }
+}

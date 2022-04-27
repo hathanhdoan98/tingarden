@@ -20,7 +20,6 @@ class Order extends Model
         'sub_charge',          // phụ phí
         'payment_total_price', // Tổng tiền phải thanh toán
         'status',
-        'create_at',
-        'update_at',
     ];
+    public $timestamps = true;
 }

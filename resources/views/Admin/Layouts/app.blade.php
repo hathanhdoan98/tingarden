@@ -16,7 +16,7 @@
 
 </head>
 <body class="bg-accpunt-pages">
-
+<div style="background-image: url('http://dev.tingarden.com/loading.gif')"></div>
 <div class="container-scroller">
 @include('Admin.Layouts.menu-top')
 <!-- partial:partials/_navbar.html -->
@@ -120,7 +120,6 @@
 <script src="{{ asset('resources/admin/assets/js/misc.js?time=').time() }}"></script>
 
 
-<script src="{{ asset('resources/admin/assets/vendors/ckeditor/ckeditor.js') }}"></script>
 <script src="{{ asset('resources/admin/assets/js/lodash.min.js') }}"></script>
 <script src="{{ asset('resources/admin/assets/js/todolist.js') }}"></script>
 <script src="{{ asset('resources/admin/assets/js/select2.full.min.js') }}"></script>
@@ -134,8 +133,18 @@
 <script src="{{ asset('resources/admin/assets/js/helper.js') }}"></script>
 <script src="{{ asset('resources/admin/assets/js/vue/vue-filter.js') }}"></script>
 <script src="{{ asset('resources/admin/assets/js/vue/components.js?time=').time() }}"></script>
+<script  src="{{ asset('js/vendor/ckeditor/ckeditor.js')}}"></script>
+<script  src="{{ asset('js/vendor/ckeditor/adapters/jquery.js')}}"></script>
 @yield('script')
 <script src="{{ asset('resources/admin/assets/js/custom.js?time=').time() }}"></script>
+<script>
+    $(document).ready(function() {
+        $('textarea.description').ckeditor();
+        CKEDITOR.config.filebrowserUploadMethod = "form";
+        CKEDITOR.config.filebrowserUploadUrl =
+            "{{ route('api.upload.ckeditor') . '?_token=' . csrf_token() }}";
+    })
+</script>
 <script>
     var changePassword = new objectChangePassword('#object-change-password');
 

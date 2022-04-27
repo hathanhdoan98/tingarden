@@ -4,21 +4,21 @@
 <head>
     <meta charset="utf-8">
 
-    <base href="http://dev.flower-shop.com/">
+    <base href="http://dev.tingarden.com/">
 
-    <link rel="canonical" href="http://dev.flower-shop.com/" />
+    <link rel="canonical" href="http://dev.tingarden.com/" />
 
-    <link rel="alternate" href="http://dev.flower-shop.com/" hreflang="vn-vi" />
+    <link rel="alternate" href="http://dev.tingarden.com/" hreflang="vn-vi" />
 
 
-    <link rel="alternate" href="http://dev.flower-shop.com/" hreflang="en" />
+    <link rel="alternate" href="http://dev.tingarden.com/" hreflang="en" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
 
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <link id="favicon" rel="shortcut icon" href="http://dev.flower-shop.com/upload/hinhanh/logo-hasu-khung-tron-7955.png" type="image/x-icon" />
+    <link id="favicon" rel="shortcut icon" href="http://dev.tingarden.com/upload/hinhanh/logo-hasu-khung-tron-7955.png" type="image/x-icon" />
 
     <title>HASU FLORA</title>
 
@@ -61,7 +61,7 @@
 
     <meta name="dc.language" CONTENT="vietnamese">
 
-    <meta name="dc.source" CONTENT="http://dev.flower-shop.com/">
+    <meta name="dc.source" CONTENT="http://dev.tingarden.com/">
 
     <meta name="dc.title" CONTENT="TIN GARDEN">
 
@@ -1040,7 +1040,7 @@
     var index = "yes";
     var template = "index";
     var timer = "2020/06/20";
-    var baseUrl = "http://dev.flower-shop.com/";
+    var baseUrl = "http://dev.tingarden.com/";
     var mobile = "no";
     var toc_page = "";
     var column = "3" || 5;

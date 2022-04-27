@@ -16,12 +16,11 @@ class CreateAliasTable extends Migration
         if(!Schema::hasTable('alias')){
             Schema::create('alias', function (Blueprint $table) {
                 $table->engine = 'InnoDB';
-                $table->increments('id');
                 $table->string('alias')->unique();
-                $table->string('type');
-                $table->string('status')->default('active');
-                $table->integer('create_at')->default(time());
-                $table->integer('update_at')->default(time());
+                $table->integer('model_id');
+                $table->string('model_type');
+
+                $table->primary(['model_id','model_type']);
                 $table->timestamps();
             });
         }

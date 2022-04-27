@@ -16,10 +16,13 @@ class CreateMetaSeosTable extends Migration
         if(!Schema::hasTable('meta_seos')) {
             Schema::create('meta_seos', function (Blueprint $table) {
                 $table->engine = 'InnoDB';
-                $table->increments('id');
+                $table->integer('model_id');
+                $table->string('model_type');
                 $table->string('title')->nullable();
                 $table->string('description')->nullable();
                 $table->string('keyword')->nullable();
+
+                $table->primary(['model_id','model_type']);
                 $table->timestamps();
             });
         }

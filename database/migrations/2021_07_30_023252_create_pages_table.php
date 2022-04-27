@@ -16,21 +16,13 @@ class CreatePagesTable extends Migration
         if(!Schema::hasTable('pages')) {
             Schema::create('pages', function (Blueprint $table) {
                 $table->increments('id');
-                $table->integer('alias_id')->unsigned();
-                $table->integer('meta_seo_id')->unsigned();
                 $table->string('name');
-                $table->string('type')->nullable()->default('default');
+                $table->tinyInteger('type')->default(1);
                 $table->string('short_content')->nullable()->default('');
                 $table->longText('content');
                 $table->string('search');
-                $table->string('image')->nullable();
-                $table->string('status');
-                $table->integer('create_at')->default(time());
-                $table->integer('update_at')->default(time());
+                $table->tinyInteger('status')->default(1);
                 $table->timestamps();
-
-                $table->foreign('alias_id')->references('id')->on('alias');
-                $table->foreign('meta_seo_id')->references('id')->on('meta_seos');
             });
         }
     }

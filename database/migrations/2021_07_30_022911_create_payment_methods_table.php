@@ -20,10 +20,7 @@ class CreatePaymentMethodsTable extends Migration
                 $table->string('search');
                 $table->string('description')->nullable();
                 $table->integer('index')->nullable()->default(1);
-                $table->string('image')->nullable();
-                $table->string('status');
-                $table->integer('create_at')->default(time());
-                $table->integer('update_at')->default(time());
+                $table->tinyInteger('status')->default(1);
                 $table->timestamps();
             });
         }

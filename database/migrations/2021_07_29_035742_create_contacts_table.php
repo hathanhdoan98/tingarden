@@ -20,9 +20,7 @@ class CreateContactsTable extends Migration
                 $table->string('email')->nullable();
                 $table->string('phone')->nullable();
                 $table->string('content')->nullable();
-                $table->string('status');
-                $table->integer('create_at')->default(time());
-                $table->integer('update_at')->default(time());
+                $table->tinyInteger('status')->default(1);
                 $table->timestamps();
             });
         }

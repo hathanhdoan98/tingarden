@@ -30,8 +30,6 @@ class User extends Authenticatable
         'ward_id',
         'phone',
         'forgot_password_token',
-        'create_at',
-        'update_at',
     ];
 
     /**

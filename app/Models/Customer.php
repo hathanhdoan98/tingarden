@@ -19,8 +19,6 @@ class Customer extends Model
         'district_id',
         'ward_id',
         'status',
-        'create_at',
-        'update_at',
     ];
 
     public $timestamps = true;

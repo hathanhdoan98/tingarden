@@ -20,12 +20,10 @@ class CreateOrderDetailsTable extends Migration
                 $table->integer('product_id')->unsigned();
                 $table->integer('quantity');
                 $table->integer('price');
-                $table->string('status');
-                $table->integer('create_at')->default(time());
-                $table->integer('update_at')->default(time());
+                $table->tinyInteger('status')->default(1);
                 $table->timestamps();
 
-                $table->foreign('order_id')->references('id')->on('orders')->onDelete('Cascade');
+                $table->foreign('order_id')->references('id')->on('orders');
                 $table->foreign('product_id')->references('id')->on('products');
             });
         }

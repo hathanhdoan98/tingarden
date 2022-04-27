@@ -9,6 +9,16 @@ class Promotion extends Model
 {
     use HasFactory;
 
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'begin' => 'datetime',
+        'end' => 'datetime',
+    ];
+
     protected $fillable = [
         'name',
         'code',
@@ -18,8 +28,7 @@ class Promotion extends Model
         'end',
         'value',
         'search',
-        'status',  // active, inactive, used
-        'create_at',
-        'update_at',
+        'status',
     ];
+    public $timestamps = true;
 }

@@ -14,7 +14,6 @@ class PaymentDetail extends Model
         'payment_method_id',
         'paid',
         'status',
-        'create_at',
-        'update_at',
     ];
+    public $timestamps = true;
 }

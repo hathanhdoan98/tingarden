@@ -79,11 +79,11 @@ class ProductController extends Controller
 
     public function create(CreateProductRequest $request)
     {
+        
         DB::beginTransaction();
         try {
             $data = [];
             $data = $request->except(['image']);
-            $data['create_at'] = $data['update_at'] = time();
             $data['status'] = 'active';
             $data['search'] = Str::slug($data['name'], ' ');
             if (isset($request->image) && !is_string($request->image) && $request->image != 'undefined') {

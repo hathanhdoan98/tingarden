@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\Upload\UploadImageController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -26,5 +27,9 @@ Route::group(['namespace'=>'Api'], function (){
         Route::get('get-province', 'AddressController@getProvince')->name('api.address.get_province');
         Route::get('get-district', 'AddressController@getDistrict')->name('api.address.get_district');
         Route::get('get-ward', 'AddressController@getWard')->name('api.address.get_ward');
+    });
+    Route::group(['namespace'=>'Upload','prefix'=>'upload'], function (){
+        Route::post('upload-image', [UploadImageController::class,'uploadImage']);
+        Route::post('upload-image-ckeditor', [UploadImageController::class,'uploadImageCkeditor'])->name('api.upload.ckeditor');
     });
 });

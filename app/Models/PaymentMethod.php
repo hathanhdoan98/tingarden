@@ -16,7 +16,6 @@ class PaymentMethod extends Model
         'index',
         'image',
         'status',
-        'create_at',
-        'update_at',
     ];
+    public $timestamps = true;
 }

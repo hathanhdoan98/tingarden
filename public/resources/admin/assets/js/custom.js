@@ -13,6 +13,7 @@ $(document).ready(function() {
     }
 
     $(".file-upload").on('change', function() {
+        $(this).closest('.form-group').find('.remove-image').css('display','inline-block');
         var image_type = $(this).attr('image-type') ? $(this).attr('image-type') : 'image' ;
         readURL(this,image_type);
     });

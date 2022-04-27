@@ -15,7 +15,6 @@ class OrderDetail extends Model
         'quantity',
         'price',
         'status',
-        'create_at',
-        'update_at',
     ];
+    public $timestamps = true;
 }

@@ -18,8 +18,6 @@ class Province extends Model
         'province_code',
         'code',
         'status',
-        'create_at',
-        'update_at',
     ];
 
     public $timestamps = true;

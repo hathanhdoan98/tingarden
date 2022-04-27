@@ -19,9 +19,7 @@ class CreatePaymentDetailsTable extends Migration
                 $table->integer('order_id')->unsigned();
                 $table->integer('payment_method_id')->unsigned();
                 $table->integer('paid');
-                $table->string('status');
-                $table->integer('create_at')->default(time());
-                $table->integer('update_at')->default(time());
+                $table->tinyInteger('status')->default(1);
                 $table->timestamps();
 
                 $table->foreign('order_id')->references('id')->on('orders');

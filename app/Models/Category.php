@@ -2,28 +2,38 @@
 
 namespace App\Models;
 
-use App\Http\Controllers\Traits\MetaSeoAliasRelation;
+use App\Http\Controllers\Traits\FormatDateTrait;
+use App\Http\Controllers\Traits\MorphRelation;
+use App\Http\Controllers\Traits\SlugNameTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Category extends Model
 {
     use HasFactory;
-    use MetaSeoAliasRelation;
+    use MorphRelation;
+    use SlugNameTrait;
+    use FormatDateTrait;
+    
+    protected $primaryKey = 'id';
 
     protected $fillable = [
-        'alias_id',
-        'meta_seo_id',
         'name',
-        'status',//publish,trash
-        'image',
+        'status',
         'index',
         'description',
         'search',
-        'create_at',
-        'update_at',
+    ];
+
+    protected $appends = [
+        'formatted_created_at',
+        'formatted_updated_at',
     ];
 
     public $timestamps = true;
 
+    public function getImagesByIndex(array $indexs){
+        return $this->images()->whereIn('index', $indexs)->get();
+    }
+    
 }

@@ -10,9 +10,9 @@ Route::group(['namespace'=>'Admin'], function (){
     Route::group(['namespace' => 'Category', 'prefix' => 'category'], function () {
         Route::get('/', 'CategoryController@index')->name('admin.category.index');
         Route::get('/get-list', 'CategoryController@getList')->name('admin.category.get_list');
-        Route::get('/get-category', 'CategoryController@getById')->name('admin.category.get_category');
+        Route::get('/find/{id?}', 'CategoryController@getById')->name('admin.category.get_category');
         Route::post('/create', 'CategoryController@create')->name('admin.category.create');
-        Route::post('/update', 'CategoryController@update')->name('admin.category.update');
+        Route::put('/change-status', 'CategoryController@changeStatus')->name('admin.category.change_status');
     });
 
     Route::group(['namespace' => 'Product', 'prefix' => 'product'], function () {

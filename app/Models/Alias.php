@@ -3,19 +3,24 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 
-class Alias extends Model
+class Alias extends ModelMPK
 {
     use HasFactory;
     protected $table = 'alias';
+    protected $primaryKey = ['model_id', 'model_type'];
+    public $incrementing = false;
+
     protected $fillable = [
-        'alias', // post_type,post,page,category,product
-        'type',
-        'status',//publish,trash
-        'create_at',
-        'update_at',
+        'alias',
+        'model_id',
+        'model_type',
     ];
 
     public $timestamps = true;
+
+    public function model()
+    {
+        return $this->morphTo();
+    }
 }

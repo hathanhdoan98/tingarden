@@ -20,13 +20,11 @@ class CreatePromotionsTable extends Migration
                 $table->string('code');
                 $table->string('description')->nullable();
                 $table->enum('type',['percent','money']); // percent / money
-                $table->integer('begin')->nullable();
-                $table->integer('end')->nullable();
+                $table->datetime('begin')->nullable();
+                $table->datetime('end')->nullable();
                 $table->integer('value');
                 $table->string('search');
-                $table->string('status');
-                $table->integer('create_at')->default(time());
-                $table->integer('update_at')->default(time());
+                $table->tinyInteger('status')->default(1);
                 $table->timestamps();
             });
         }
