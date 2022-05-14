@@ -14,6 +14,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _common_ajax_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../common/ajax.js */ "./resources/js/common/ajax.js");
 /* harmony import */ var _common_helper_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../common/helper.js */ "./resources/js/common/helper.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 
 
 
@@ -25,16 +31,14 @@ function AdminObject() {
   this.apiGetItem = apiGetItem;
   this.apiChangeStatus = apiChangeStatus;
   this.pagination = {
-    currentPage: 1,
-    lastPage: 1,
-    perPage: typeof limit !== 'undefined' ? limit : _LIMIT,
-    total: 0
+    page: 1,
+    limit: typeof limit !== 'undefined' ? limit : _LIMIT
   };
   this.filter = {
     status: 1,
     keyword: '',
-    sortKey: typeof sortKey !== 'undefined' ? sortKey : _SORT_KEY,
-    sortValue: typeof sortValue !== 'undefined' ? sortValue : _SORT_VAL
+    sort_key: typeof sortKey !== 'undefined' ? sortKey : _SORT_KEY,
+    sort_value: typeof sortValue !== 'undefined' ? sortValue : _SORT_VAL
   }; //Methods
 
   /**
@@ -43,14 +47,9 @@ function AdminObject() {
 
   this.getList = function () {
     var payload = {
-      limit: this.pagination.perPage,
-      page: this.pagination.currentPage,
-      filter: {
-        status: this.filter.status,
-        keyword: this.filter.keyword,
-        sort_key: this.filter.sortKey,
-        sort_value: this.filter.sortValue
-      }
+      limit: this.pagination.limit,
+      page: this.pagination.page,
+      filter: this.filter
     };
 
     var successCallback = function successCallback(response) {
@@ -93,19 +92,19 @@ function AdminObject() {
     }, this.apiChangeStatus, successCallback, failCallback);
   }, // Set mothods
   this.setSortKey = function (sortKey) {
-    this.filter.sortKey = sortKey;
+    this.filter.sort_key = sortKey;
   };
 
   this.setSortValue = function (sortValue) {
-    this.filter.sortValue = sortValue;
+    this.filter.sort_value = sortValue;
   };
 
   this.setPage = function (page) {
-    this.pagination.currentPage = page;
+    this.pagination.page = page;
   };
 
   this.setLimit = function (limit) {
-    this.pagination.perPage = limit;
+    this.pagination.limit = limit;
   };
 
   this.setStatus = function (status) {
@@ -114,6 +113,12 @@ function AdminObject() {
 
   this.setKeyword = function (keyword) {
     this.filter.keyword = keyword;
+  };
+
+  this.setFilter = function (filter) {
+    var originalFilter = this.filter; //merge filter to originalFilter
+
+    this.filter = _objectSpread(_objectSpread({}, originalFilter), filter);
   };
 }
 
@@ -247,6 +252,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "formatDate": () => (/* binding */ formatDate),
 /* harmony export */   "formatMoney": () => (/* binding */ formatMoney),
 /* harmony export */   "formatNumber": () => (/* binding */ formatNumber),
+/* harmony export */   "keyBy": () => (/* binding */ keyBy),
 /* harmony export */   "randomCharacter": () => (/* binding */ randomCharacter),
 /* harmony export */   "randomNumber": () => (/* binding */ randomNumber),
 /* harmony export */   "refactorUrl": () => (/* binding */ refactorUrl),
@@ -502,6 +508,23 @@ function removeArrayElement(arr, value) {
 
   return arr;
 }
+/**
+ * 
+ * @param mix key 
+ * @param array  arr
+ * @returns array
+ */
+
+
+function keyBy(key, arr) {
+  var result = [];
+  arr.forEach(function (item, index) {
+    if (item[key] || item[key] == 0) {
+      result[item[key]] = item;
+    }
+  });
+  return result;
+}
 
 
 
@@ -572,6 +595,8 @@ var __webpack_exports__ = {};
   \***************************************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _admin_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./admin.js */ "./resources/js/admin/admin.js");
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 
 
 __webpack_require__(/*! ../common/define.js */ "./resources/js/common/define.js");
@@ -596,12 +621,17 @@ $(document).delegate('.btn-status', 'click', function (e) {
 $(document).delegate('#keyword', 'keypress', function (e) {
   if (e.key == 'Enter') {
     adminObject.setKeyword($(this).val());
+    adminObject.setPage(1);
     adminObject.getList();
   }
 });
 $(document).delegate('#limit-option', 'change', function (e) {
-  console.log($(this).val());
   adminObject.setLimit($(this).val());
+  adminObject.getList();
+});
+$(document).delegate('select.select-search', 'change', function (e) {
+  var searchKey = $(this).data('search');
+  adminObject.setFilter(_defineProperty({}, searchKey, $(this).val()));
   adminObject.getList();
 });
 })();

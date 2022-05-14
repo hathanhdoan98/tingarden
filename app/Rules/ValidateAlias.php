@@ -28,11 +28,10 @@ class ValidateAlias implements Rule
      */
     public function passes($attribute, $value)
     {
-        if(\request()->id){
-            return !app(AliasService::class)->checkExist($value, \request()->id, $this->model);
-        }
-        $alias = app(AliasService::class)->findOneByAlias($value);
-        return $alias ? false : true;
+        return !app(AliasService::class)->checkExist($value, [
+            'model_id' => \request()->id,
+            'model_type' => $this->model,
+        ]);
     }
 
     /**

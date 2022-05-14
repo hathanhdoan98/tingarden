@@ -43,12 +43,11 @@ class AliasService
 
     /**
      * @param string $alias
-     * @param int $modelId
-     * @param string $modelType
+     * @param array $model
      * @return bool
      */
-    public function checkExist(string $alias, int $modelId, string $modelType): bool
+    public function checkExist(string $alias, array $model=[]): bool
     {
-        return $this->aliasRepository->checkExist($alias, $modelId, $modelType);
+        return $this->aliasRepository->checkExist($alias, $model);
     }
 }

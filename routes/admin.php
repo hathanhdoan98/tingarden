@@ -18,9 +18,9 @@ Route::group(['namespace'=>'Admin'], function (){
     Route::group(['namespace' => 'Product', 'prefix' => 'product'], function () {
         Route::get('/', 'ProductController@index')->name('admin.product.index');
         Route::get('/get-list', 'ProductController@getList')->name('admin.product.get_list');
-        Route::get('/get-product', 'ProductController@getById')->name('admin.product.get_product');
+        Route::get('/find/{id?}', 'ProductController@getById')->name('admin.product.get_product');
         Route::post('/create', 'ProductController@create')->name('admin.product.create');
-        Route::post('/update', 'ProductController@update')->name('admin.product.update');
+        Route::put('/change-status', 'ProductController@changeStatus')->name('admin.product.change_status');
     });
 
     Route::group(['namespace' => 'Page', 'prefix' => 'page'], function () {
@@ -34,9 +34,9 @@ Route::group(['namespace'=>'Admin'], function (){
     Route::group(['namespace' => 'Post', 'prefix' => 'post'], function () {
         Route::get('/', 'PostController@index')->name('admin.post.index');
         Route::get('/get-list', 'PostController@getList')->name('admin.post.get_list');
-        Route::get('/get-post', 'PostController@getById')->name('admin.post.get_post');
+        Route::get('/find/{id?}', 'PostController@getById')->name('admin.post.get_post');
         Route::post('/create', 'PostController@create')->name('admin.post.create');
-        Route::post('/update', 'PostController@update')->name('admin.post.update');
+        Route::put('/change-status', 'PostController@changeStatus')->name('admin.post.change_status');
     });
 
     Route::group(['namespace' => 'PaymentMethod', 'prefix' => 'payment-method'], function () {
@@ -61,6 +61,11 @@ Route::group(['namespace'=>'Admin'], function (){
         Route::get('/get-item', 'PromotionController@getById')->name('admin.promotion.get_item');
         Route::post('/create', 'PromotionController@create')->name('admin.promotion.create');
         Route::post('/update', 'PromotionController@update')->name('admin.promotion.update');
+    });
+
+    Route::group(['namespace' => 'Setting', 'prefix' => 'setting'], function () {
+        Route::get('/', 'SettingController@index')->name('admin.setting.index');
+        Route::post('/update', 'SettingController@update')->name('admin.setting.update');
     });
 });
 

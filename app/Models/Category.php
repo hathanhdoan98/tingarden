@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Http\Controllers\Traits\FormatDateTrait;
-use App\Http\Controllers\Traits\MorphRelation;
 use App\Http\Controllers\Traits\SlugNameTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -11,7 +10,6 @@ use Illuminate\Database\Eloquent\Model;
 class Category extends Model
 {
     use HasFactory;
-    use MorphRelation;
     use SlugNameTrait;
     use FormatDateTrait;
     
@@ -31,6 +29,18 @@ class Category extends Model
     ];
 
     public $timestamps = true;
+
+    public function alias(){
+        return $this->morphOne(Alias::class,'model');
+    }
+
+    public function metaseo(){
+        return $this->morphOne(MetaSeo::class,'model');
+    }
+
+    public function images(){
+        return $this->morphMany(Image::class,'model');
+    }
 
     public function getImagesByIndex(array $indexs){
         return $this->images()->whereIn('index', $indexs)->get();

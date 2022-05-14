@@ -9,6 +9,7 @@ use App\Http\Services\UploadImageService;
 use App\Models\Category;
 use App\Repositories\CategoryRepository;
 use App\Repositories\ImageRepository;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -18,30 +19,20 @@ class CategoryService
     private $categoryRepository;
     private $imageRepository;
     private $uploadImageService;
-    private $imageService;
-    private $searchFields;
     /**
      * @param CategoryRepository $categoryRepository
      * @param UploadImageService $uploadImageService
-     * @param ImageService $imageService
      * @param ImageRepository $imageRepository
      * @return void
      */
     public function __construct(
         CategoryRepository $categoryRepository,
         UploadImageService $uploadImageService,
-        ImageService $imageService,
         ImageRepository $imageRepository
     ) {
         $this->categoryRepository = $categoryRepository;
         $this->uploadImageService = $uploadImageService;
-        $this->imageService = $imageService;
         $this->imageRepository = $imageRepository;
-        $this->searchFields = [
-            'search',
-            'status',
-            'keyword'
-        ];
     }
 
     public function paginateAll(
@@ -52,33 +43,45 @@ class CategoryService
         int $sortValue
     ): LengthAwarePaginator {
         $filter = [];
+        $fillableProperties = $this->categoryRepository->getFillableProperties();
         foreach ($data as $key => $value) {
-            if (!in_array($key, $this->searchFields)) {
-                continue;
-            }
-            if ($key == 'keyword') {
-                if (empty($value)) {
-                    continue;
-                }
-                $filter['search'] = [
-                    'operator' => 'LIKE',
-                    'value' => "%$value%"
-                ];
-            } else {
+            if (in_array($key, $fillableProperties)) {
                 $filter[$key] = $value;
             }
+        }
+        if(!empty($data['keyword'])){
+            $filter['search'] = [
+                'operator' => 'LIKE',
+                'value' => "%". $data['keyword']. "%"
+            ];
         }
         $searchCriteria = [
             'page' => $page,
             'limit' => $limit,
             'sort' => $sortValue ? $sortKey : "-$sortKey",
             "filter" => $filter,
-            'relations' => ['images']
         ];
-        writeLog('log_mysql_query','hehe');
-        return $this->categoryRepository->findBy(
+        return $this->categoryRepository->paginateAllCategory(
             $searchCriteria,
             null
+        );
+    }
+
+    /**
+     * @param int|null $status
+     * @return Collection|null
+     */
+    public function getAllCategories(?int $status=null): ?Collection{
+        $filter = [];
+        if($status){
+            $filter['status'] = $status;
+        }
+        $searchCriteria = [
+            'sort' => 'name',
+            "filter" => $filter
+        ];
+        return $this->categoryRepository->findBy(
+            $searchCriteria, null, false
         );
     }
 

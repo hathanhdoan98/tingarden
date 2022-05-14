@@ -31,18 +31,21 @@ class AliasRepository extends AbstractEloquentRepository
 
     /**
      * @param string $alias
-     * @param int $modelId
-     * @param string $modelType
+     * @param array $model
      * @return bool
      */
-    public function checkExist(string $alias, int $modelId, string $modelType): bool
+    public function checkExist(string $alias, array $model = []): bool
     {
-        $alias = $this->findOneBy(['alias' => $alias], function (Builder $builder) use ($modelId, $modelType) {
-            $builder->where(function ($query) use ($modelId, $modelType) {
-                $query->where('model_id', '!=', $modelId)->orWhere('model_type', '!=', $modelType);
+        if($model){
+            $alias = $this->findOneBy(['alias' => $alias], function (Builder $builder) use ($model) {
+                $builder->where(function ($query) use ($model) {
+                    $query->where('model_id', '!=', $model['model_id'])->orWhere('model_type', '!=', $model['model_type']);
+                });
             });
-        });
-
+        }else{
+            $alias = $this->findOneByAlias($alias);
+        }
         return $alias ? true : false;
+        
     }
 }

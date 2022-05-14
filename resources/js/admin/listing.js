@@ -26,12 +26,20 @@ $(document).delegate('.btn-status','click',function(e){
 $(document).delegate('#keyword','keypress',function(e){
     if(e.key == 'Enter'){
         adminObject.setKeyword($(this).val());
+        adminObject.setPage(1);
         adminObject.getList();
     }
 })
 
 $(document).delegate('#limit-option','change',function(e){
-    console.log($(this).val());
     adminObject.setLimit($(this).val());
+    adminObject.getList()
+})
+
+$(document).delegate('select.select-search','change',function(e){
+    var searchKey = $(this).data('search');
+    adminObject.setFilter({
+        [searchKey] : $(this).val()
+    });
     adminObject.getList()
 })

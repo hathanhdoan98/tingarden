@@ -16,7 +16,7 @@ class CreateDistrictsTable extends Migration
         if(!Schema::hasTable('districts')) {
             Schema::create('districts', function (Blueprint $table) {
                 $table->increments('id');
-                $table->integer('province_id')->unsigned();
+                $table->integer('province_code');
                 $table->string('name');
                 $table->string('search')->nullable();
                 $table->string('alias');
@@ -26,7 +26,7 @@ class CreateDistrictsTable extends Migration
                 $table->tinyInteger('status')->default(1);
                 $table->timestamps();
 
-                $table->foreign('province_id')->references('id')->on('provinces');
+                $table->foreign('province_code')->references('province_code')->on('provinces');
             });
         }
     }

@@ -154,6 +154,9 @@ return [
     'attributes' => [
         'alias' => 'Đường dẫn',
         'name' => 'Tên',
+        'category_id' => 'Danh mục',
+        'price' => 'Giá',
+        'sale_off_price' => 'Giá khuyến mãi',
     ],
 
 ];

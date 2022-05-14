@@ -3,272 +3,93 @@
 namespace App\Http\Controllers\Admin\Post;
 
 use App\Http\Controllers\Traits\Lib;
-use App\Http\Requests\Post\CreatePostRequest;
-use App\Jobs\OptimizeImage;
-use App\Models\Alias;
-use App\Models\PostImage;
-use App\Models\Post;
 use App\Http\Controllers\Controller;
-use App\Models\MetaSeo;
+use App\Http\Requests\Post\ChangePostStatusRequest;
+use App\Http\Requests\Post\CreatePostRequest;
+use App\Http\Resources\PostResource;
+use App\Http\Responses\PaginationResponse;
+use App\Services\PostService;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 
 class PostController extends Controller
 {
     use Lib;
 
-    public function index()
+    protected $postService;
+
+    /**
+     * @param PostService $postService
+     * @return void
+     */
+    public function __construct(PostService $postService)
     {
-        return view('Admin.Post.index');
+        $this->postService = $postService;
+    }
+    public function index(Request $request)
+    {
+        return view('Admin.Post.index', $this->getList($request));
     }
 
     public function getList(Request $request)
     {
-
-        $data = $request->all();
-        $limit = isset($data['limit']) ? (int)$data['limit'] : 10;
-        $limit = ($limit > 200) ? 200 : $limit;
-        $posts = new Post();
-        $status = 'active';
-        $sort_key = 'create_at';
-        $sort_value = 'DESC';
-
-        if (isset($data['filter'])) {
-            $filter = is_array($data['filter']) ? $data['filter'] : json_decode($data['filter'], true);
-            if (!empty($filter['status'])) {
-                $status = $filter['status'];
-            }
-            if (!empty($filter['keyword'])) {
-                $posts = $posts->where('search', 'like', '%' . Str::slug($filter['keyword'], ' ') . '%');
-            }
-
-            if (!empty($filter['sort'])) {
-                $sort_value = $filter['sort'];
-            }
-
-            if (!empty($filter['sort_key'])) {
-                $sort_key = $filter['sort_key'];
-            }
+        $limit = $request->input('limit', config('pagination.limit'));
+        $page = $request->input('page', config('pagination.start_page'));
+        $filter = $request->input('filter',[]);
+        $filter = is_array($filter) ? $filter : (array)json_decode($filter);
+        $filter['status'] = $filter['status'] ?? config('common.status.active');
+        $sortKey = !empty($filter['sort_key']) ? $filter['sort_key'] : config('pagination.sort_default.key');
+        $sortValue = $filter['sort_value'] ?? config('pagination.sort_default.value');
+        $posts = $this->postService->paginateAll($page, $limit, $filter, $sortKey, $sortValue);
+        $result = [
+            'list' => PostResource::collection($posts->items())->toArray($request),
+            'pagination' => PaginationResponse::getPagination($posts),
+            'sort_key' => $sortKey,
+            'sort_value' => $sortValue,
+        ];
+        if ($request->wantsJson()) {
+            return $this->responseOK(view('Admin.Post.datatable', $result)->render());
         }
-        $posts = $posts->where('status', $status)->orderBy($sort_key, $sort_value);
-        if ($limit == -1) {
-            $posts = $posts->get();
-        } else {
-            $posts = $posts->paginate($limit);
-        }
-
-        return $this->setResponse(['data' => $posts]);
+        return $result;
     }
 
-    public function getById(Request $request)
+    public function getById($id = null, Request $request)
     {
-        if (empty($request->id)) {
-            return $this->setResponse([
-                    'success' => false,
-                    'message' => 'Vui lòng chọn bài viết'
-                ]
-            );
+        if($id){
+            $post = $this->postService->findPost($id);
+            return $this->responseOK($post);
         }
-        $post = Post::where('id', $request->id)->with(['alias', 'meta_seo'])->first();
-
-        return $this->setResponse([
-                'data' => $post
-            ]
-        );
-
+        return $this->responseOK();
     }
 
     public function create(CreatePostRequest $request)
     {
-        DB::beginTransaction();
         try {
-            $data = [];
-            $data = $request->except(['image']);
-            $data['create_at'] = $data['update_at'] = time();
-            $data['status'] = 'active';
-            $data['search'] = Str::slug($data['name'], ' ');
-
-            $data_alias = $data;
-            $data_alias['type'] = 'post';
-            $data_alias['alias'] = !empty($data['alias']) ? Str::slug($data['alias'], '-') : Str::slug($data['name'], '-');
-
-            $data_meta_seo = $data['meta_seo'] ?? [];
-            $data_meta_seo = is_array($data_meta_seo) ? $data_meta_seo : (array)json_decode($data_meta_seo);
-
-            $alias = Alias::where('alias', $data_alias['alias'])->first();
-            if ($alias) {
-                return $this->setResponse([
-                        'success' => false,
-                        'message' => 'Đường dẫn đã tồn tại'
-                    ]
-                );
-            }
-            $alias = Alias::create($data_alias);
-            $meta_seo = MetaSeo::create($data_meta_seo);
-
-            if (!isset($alias['id']) || !isset($meta_seo['id'])) {
-                DB::rollBack();
-                return $this->setResponse([
-                        'success' => false,
-                        'message' => 'Xảy ra lỗi',
-                    ]
-                );
-            }
-            $data['alias_id'] = $alias['id'];
-            $data['meta_seo_id'] = $meta_seo['id'];
-
-            $post = Post::create($data);
-            if ($post) {
-                if (isset($request->image) && !is_string($request->image) && $request->image != 'undefined') {
-                    $rs_upload = $this->uploadImage($request->image, $post);
-                    if (!$rs_upload['success']) {
-                        DB::rollBack();
-                        return $this->setResponse($rs_upload);
-                    }
+            return DB::transaction(function () use ($request) {
+                $post = $this->postService->createPost($request->all());
+                if ($post) {
+                    return $this->responseOK($post);
                 }
-                DB::commit();
-                return $this->setResponse([
-                        'data' => $post,
-                        'message' => 'Tạo thành công',
-                    ]
-                );
-            }
-            DB::rollBack();
-            return $this->setResponse([
-                    'success' => false,
-                    'message' => 'Xảy ra lỗi',
-                ]
-            );
+                return $this->responseError(Response::HTTP_BAD_REQUEST);
+            });
         } catch (\Exception $e) {
-            DB::rollBack();
-            return $this->setResponse([
-                    'success' => false,
-                    'message' => $e->getMessage(),
-                ]
-            );
+            return $this->responseError(Response::HTTP_INTERNAL_SERVER_ERROR, $e);
         }
-
     }
 
-    public function update(Request $request)
-    {
-        $data = $request->except(['image']);
-        if (empty($data['id'])) {
-            return $this->setResponse([
-                    'success' => false,
-                    'message' => 'Vui lòng chọn bài viết',
-                ]
-            );
-        }
-
-        $data['update_at'] = time();
-        if (!empty($data['name'])) {
-            $data['search'] = Str::slug($data['name'], ' ');
-            $data['alias'] = Str::slug($data['name'], '-');
-        }
-
-        if (!empty($request->alias)) {
-            $data['alias'] = Str::slug($request->alias, '-');
-        }
-        $post = Post::find($data['id']);
-        if (!$post) {
-            return $this->setResponse([
-                    'success' => false,
-                    'message' => 'Không tìm thấy bài viết',
-                ]
-            );
-        }
-        $data['index'] = isset($data['index']) ? $data['index'] : $post['index'];
-        if (!empty($data['status']) && $post->status != $data['status']) {
-            $post->update(['status' => $data['status']]);
-            return $this->setResponse([
-                    'data' => $post,
-                    'message' => 'Đã thay đổi trạng thái',
-                ]
-            );
-        }
-
-        $rs_alias = Alias::where('alias', $data['alias'])->where('id', '!=', $post['alias_id'])->first();
-        if ($rs_alias) {
-            return $this->setResponse([
-                    'success' => false,
-                    'message' => 'Đường dẫn đã tồn tại',
-                ]
-            );
-        }
-
-        if (!empty($request->image) && !is_string($request->image) && $request->image != 'undefined') {
-            $rs_upload = $this->uploadImage($request->image);
-            if (!$rs_upload['success']) {
-                return $this->setResponse($rs_upload);
-            }
-            $data['image'] = $rs_upload['data']['path'];
-
-            if (!empty($post['image'])) {
-                removeFile(["path" => $post['image']]);
-            }
-        }
-
-        $post->update($data);
-        $alias = Alias::find($post['alias_id']);
-        $meta_seo = MetaSeo::find($post['meta_seo_id']);
-
-        if ($alias && isset($data['alias'])) {
-            $alias->update($data);
-        }
-        if ($meta_seo && isset($data['meta_seo'])) {
-            $data['meta_seo'] = is_array($data['meta_seo']) ? $data['meta_seo'] : (array)json_decode($data['meta_seo']);
-            $meta_seo->update($data['meta_seo']);
-        }
-
-        return $this->setResponse([
-                'data' => $post,
-                'message' => 'Cập nhật thành công',
-            ]
-        );
-    }
-
-    protected function uploadImage($image, $post)
-    {
+    public function changeStatus(ChangePostStatusRequest $request){
         try {
-            $file_name = !empty($post['name']) ? Str::slug($post['name'],'_') : $image->getClientOriginalName();
-            $file_name = date('YmdHis') . '_' . str_replace(" ", "_", $file_name);
-            $sizes = [
-                ['width' => 400,'height'=> 280],
-                ['width' => 600,'height'=> 400],
-                ['width' => 250,'height'=> 180],
-            ];
-            foreach ($sizes as $size){
-                $rs = uploadFile([
-                    'file' => $image,
-//                    'file_name' => $file_name,
-                    'path' => 'upload/images/post/'.$size['width'].'x'.$size['height'],
-                    'width' => $size['width'],
-                    'height' => $size['height'],
-                ]);
-                if($rs['success']){
-                    PostImage::updateOrCreate(
-                        ['post_id' => $post['id'], 'width'=> $size['width'], 'height'=> $size['height']],
-                        ['path'=>$rs['data']['path']]
-                    );
-                    dispatch(new OptimizeImage(getcwd() . '/' . $rs['data']['path']));
-                }else{
-                    return [
-                        'success' => false,
-                        'message'=> $rs['message']
-                    ];
+            return DB::transaction(function () use ($request) {
+                $post = $this->postService->changeStatus($request->id, $request->boolean('status'));
+                if ($post) {
+                    return $this->responseOK($post);
                 }
-            }
-            return [
-                'success' => true,
-                'message'=> ''
-            ];
-        }catch (\Exception $e){
-            return [
-                'success' => false,
-                'message' => $e->getMessage(),
-            ];
+                return $this->responseError(Response::HTTP_BAD_REQUEST);
+            });
+        } catch (\Exception $e) {
+            return $this->responseError(Response::HTTP_INTERNAL_SERVER_ERROR, $e);
         }
     }
 }
+

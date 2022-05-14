@@ -8,6 +8,10 @@ return [
         'product' => [
             'width' => 640,
             'height' => 630,
+        ],
+        'post' => [
+            'width' => 640,
+            'height' => 630,
         ]
     ],
     'default_image' => 'images/default-image.png',

@@ -273,4 +273,13 @@ abstract class AbstractEloquentRepository implements BaseRepository
     {
         return $this->model->whereLike($field, $queryString)->get();
     }
+
+    /**
+     * @param string|array $field
+     * @param string $queryString
+     * @return array
+     */
+    public function getFillableProperties(): array{
+        return $this->model->getFillable();
+    }
 }

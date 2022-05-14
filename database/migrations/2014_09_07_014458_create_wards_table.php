@@ -16,7 +16,7 @@ class CreateWardsTable extends Migration
         if(!Schema::hasTable('wards')) {
             Schema::create('wards', function (Blueprint $table) {
                 $table->increments('id');
-                $table->integer('district_id')->unsigned();
+                $table->integer('district_code');
                 $table->string('name');
                 $table->string('search')->nullable();
                 $table->string('alias');
@@ -26,7 +26,7 @@ class CreateWardsTable extends Migration
                 $table->tinyInteger('status')->default(1);
                 $table->timestamps();
 
-                $table->foreign('district_id')->references('id')->on('districts');
+                $table->foreign('district_code')->references('district_code')->on('districts');
             });
         }
     }

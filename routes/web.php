@@ -13,8 +13,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::group(['namespace' => 'Web'], function () {
+    Route::get('/mail', function(){
+        return view('mail.new-order');
+    });
     Route::get('/posts', 'WebController@getPosts');
-    Route::get('/{alias?}', 'WebController@index')->name('home');
+    // Route::get('/{alias?}', 'WebController@index')->name('home');
 });
 
 Route::get('/detail', function () {

@@ -2,26 +2,16 @@
 
 namespace App\Http\Controllers\Admin\Category;
 
-use App\Events\InsertNewRecord;
-use App\Exceptions\UploadImageException;
 use App\Http\Controllers\Traits\Lib;
 use App\Http\Requests\Category\CreateCategoryRequest;
-use App\Jobs\OptimizeImage;
-use App\Models\Alias;
-use App\Models\Category;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Category\ChangeCategoryStatusRequest;
-use App\Http\Requests\Category\UpdateCategoryRequest;
 use App\Http\Resources\CategoryResource;
 use App\Http\Responses\PaginationResponse;
-use App\Models\Image;
-use App\Models\MetaSeo;
 use App\Services\CategoryService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
-use LogicException;
 
 class CategoryController extends Controller
 {

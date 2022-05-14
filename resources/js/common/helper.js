@@ -208,6 +208,22 @@ function createErrorMessage(text) {
     return arr
 }
 
+/**
+ * 
+ * @param mix key 
+ * @param array  arr
+ * @returns array
+ */
+function keyBy(key ,arr){
+    var result = []
+    arr.forEach(function(item, index){
+        if(item[key] || item[key] == 0){
+            result[item[key]] = item
+        }
+    })
+    return result;
+}
+
 export {
     createSlug,
     formatMoney,
@@ -222,5 +238,6 @@ export {
     createErrorMessage,
     removeAllErrorMessage,
     activeBtnStatus,
-    removeArrayElement
+    removeArrayElement,
+    keyBy
 }

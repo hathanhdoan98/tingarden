@@ -786,12 +786,14 @@
     background-color: white !important;
 }
 
-.btn-remove-image {
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    background: url('/images/delete-icon2.png') no-repeat ;
-    width : 50px;
-    height: 50px;
-    border: none;
+.remove-image {
+    display: none;
+}
+
+.hide {
+    display: none;
+}
+
+.show {
+    display: block;
 }

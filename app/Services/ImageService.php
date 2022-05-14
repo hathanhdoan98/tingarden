@@ -2,8 +2,6 @@
 
 namespace App\Services;
 
-use App\Http\Services\UploadImageService;
-use App\Repositories\CategoryRepository;
 use App\Repositories\ImageRepository;
 use Illuminate\Database\Eloquent\Model;
 

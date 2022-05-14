@@ -30,6 +30,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "formatDate": () => (/* binding */ formatDate),
 /* harmony export */   "formatMoney": () => (/* binding */ formatMoney),
 /* harmony export */   "formatNumber": () => (/* binding */ formatNumber),
+/* harmony export */   "keyBy": () => (/* binding */ keyBy),
 /* harmony export */   "randomCharacter": () => (/* binding */ randomCharacter),
 /* harmony export */   "randomNumber": () => (/* binding */ randomNumber),
 /* harmony export */   "refactorUrl": () => (/* binding */ refactorUrl),
@@ -284,6 +285,23 @@ function removeArrayElement(arr, value) {
   }
 
   return arr;
+}
+/**
+ * 
+ * @param mix key 
+ * @param array  arr
+ * @returns array
+ */
+
+
+function keyBy(key, arr) {
+  var result = [];
+  arr.forEach(function (item, index) {
+    if (item[key] || item[key] == 0) {
+      result[item[key]] = item;
+    }
+  });
+  return result;
 }
 
 

@@ -35,7 +35,8 @@
                                             class="form-control form-control-sm">
                                     </div>
                                     <div class="form-group">
-                                        <p class="m-0 font-0-9">Đường dẫn</p>
+                                        <p class="m-0 font-0-9">Đường dẫn<span class="text-danger">*</span>
+                                        </p>
                                         <input name="alias" placeholder="Đường dẫn" required type="text"
                                             class="form-control form-control-sm">
                                     </div>
@@ -52,7 +53,6 @@
                                             <img class="profile-pic"
                                                 image-type="image"
                                                 src="{{ asset('resources/admin/assets/images/default-thumbnail.png') }}" />
-                                            <button style="display: none" class="btn-remove-image"></button>    
                                             <div class="upload-button" image-type="image">
                                                 <i class="fas fa-camera"></i>
                                             </div>
@@ -86,7 +86,7 @@
                                 </div>
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <p class="m-0 font-0-9">Description</p>
+                                        <p class="m-0 font-0-9">Mô tả</p>
                                         <textarea name="description" type="text" rows="6" class="form-control form-control-sm"></textarea>
                                     </div>
                                 </div>

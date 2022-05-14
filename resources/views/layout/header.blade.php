@@ -92,7 +92,7 @@
                                                 <a href="lang/en" class="" title="Tiếng anh">EN</a>
                                             </div>
                                         </li>
-                                        @if($categories)
+                                        @if(!empty($categories))
                                             @foreach($categories as $category)
                                                 <li class="p-relative">
                                                     <a itemprop="url" href="lien-he" title="{{$category['name']}}"
@@ -118,7 +118,7 @@
                             </div>
                         </div>
                         <ul class="ul-menu mg-0 none-mobile">
-                            @if($categories1)
+                            @if(!empty($categories1))
                                 @foreach($categories1 as $index=>$category)
                                     <li class=" p-relative">
                                         <a class="dropdown-holder" itemprop="url" href="bo-sinh-nhat" title="Hoa bó">

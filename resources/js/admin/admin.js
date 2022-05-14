@@ -11,17 +11,14 @@ function AdminObject() {
     this.apiGetItem = apiGetItem;
     this.apiChangeStatus = apiChangeStatus;
     this.pagination = {
-        currentPage : 1,
-        lastPage : 1,
-        perPage :  (typeof limit !== 'undefined') ? limit : _LIMIT,
-        total : 0,
-
+        page : 1,
+        limit :  (typeof limit !== 'undefined') ? limit : _LIMIT,
     };
     this.filter = {
         status : 1,
         keyword : '',
-        sortKey : (typeof sortKey !== 'undefined') ? sortKey : _SORT_KEY,
-        sortValue : (typeof sortValue !== 'undefined') ? sortValue : _SORT_VAL,
+        sort_key : (typeof sortKey !== 'undefined') ? sortKey : _SORT_KEY,
+        sort_value : (typeof sortValue !== 'undefined') ? sortValue : _SORT_VAL,
     }
     //Methods
 
@@ -30,14 +27,9 @@ function AdminObject() {
      */
     this.getList = function(){
         var payload = {
-            limit : this.pagination.perPage,
-            page : this.pagination.currentPage,
-            filter : {
-                status : this.filter.status,
-                keyword : this.filter.keyword,
-                sort_key : this.filter.sortKey,
-                sort_value : this.filter.sortValue,
-            },
+            limit : this.pagination.limit,
+            page : this.pagination.page,
+            filter : this.filter
         }
         var successCallback = function(response){
             activeBtnStatus(payload.filter.status);
@@ -99,22 +91,27 @@ function AdminObject() {
     
     // Set mothods
     this.setSortKey = function(sortKey){
-        this.filter.sortKey = sortKey;
+        this.filter.sort_key = sortKey;
     }
     this.setSortValue = function(sortValue){
-        this.filter.sortValue = sortValue;
+        this.filter.sort_value = sortValue;
     }
     this.setPage = function(page){
-        this.pagination.currentPage = page;
+        this.pagination.page = page;
     }
     this.setLimit = function(limit){
-        this.pagination.perPage = limit;
+        this.pagination.limit = limit;
     }
     this.setStatus = function(status){
         this.filter.status = status;
     }
     this.setKeyword = function(keyword){
         this.filter.keyword = keyword;
+    }
+    this.setFilter = function(filter){
+        var originalFilter = this.filter;
+        //merge filter to originalFilter
+        this.filter = {...originalFilter, ...filter};
     }
 }
 export {AdminObject};

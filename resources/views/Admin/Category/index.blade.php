@@ -15,7 +15,7 @@
                                     <div class="tags_input">
                                         <div class="input_search w-100">
                                             <input class="form-control form-control-sm" id="keyword"
-                                                type="text" placeholder="Tìm kiếm tên, email, sđt..">
+                                                type="text" placeholder="Tìm kiếm tên">
                                         </div>
                                     </div>
                                 </div>
@@ -61,14 +61,6 @@
         var messageRequired = '{{ trans('message.required') }}';
         var messageMin = '{{ trans('message.min') }}';
         var messageMax = '{{ trans('message.max') }}';
-    </script>
-    <script>
-        $(document).ready(function() {
-            $('textarea.description').ckeditor();
-            CKEDITOR.config.filebrowserUploadMethod = "form";
-            CKEDITOR.config.filebrowserUploadUrl =
-                "{{ route('api.upload.ckeditor') . '?_token=' . csrf_token() }}";
-        })
     </script>
     <script src="{{ asset('/js/admin/listing.js') }}"></script>
     <script src="{{ asset('/js/admin/category.js') }}"></script>

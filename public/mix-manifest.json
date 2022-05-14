@@ -1,5 +1,9 @@
 {
-    "/js/admin/create-data.js": "/js/admin/create-data.js?id=aa7af7c25bf9f4df39a87952e75afb6f",
-    "/js/admin/listing.js": "/js/admin/listing.js?id=ff7886e9b0b976875cccfd83e3be0658",
-    "/js/admin/category.js": "/js/admin/category.js?id=1db07dc3e1a46fa55f31b953d62e6c9c"
+    "/js/admin/admin.js": "/js/admin/admin.js?id=82316749874fcfdcac2e1fc352c6d351",
+    "/js/admin/create-data.js": "/js/admin/create-data.js?id=844fab3d97cbc2bfd9fee9c7b3957780",
+    "/js/admin/listing.js": "/js/admin/listing.js?id=f5c41fa32c360856b606a543bf7809e7",
+    "/js/admin/category.js": "/js/admin/category.js?id=6422917d5baaf8d11b10ad70a766ab53",
+    "/js/admin/post.js": "/js/admin/post.js?id=d3697c49f2f7c3df7584a82e8a1f06cc",
+    "/js/admin/product.js": "/js/admin/product.js?id=364fb41a90a07387cbbf293ab3901586",
+    "/js/admin/setting.js": "/js/admin/setting.js?id=bf4caeca9132504c2ca87fe829495fb4"
 }

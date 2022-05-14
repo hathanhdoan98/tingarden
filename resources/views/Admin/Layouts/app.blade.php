@@ -10,7 +10,7 @@
             display: none;
         }
     </style>
-    <meta name="_token" content="{{ csrf_token() }}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ config('app.name', 'Buylike') }}</title>
     @include('Admin.Layouts.header')
 
@@ -122,7 +122,6 @@
 
 <script src="{{ asset('resources/admin/assets/js/lodash.min.js') }}"></script>
 <script src="{{ asset('resources/admin/assets/js/todolist.js') }}"></script>
-<script src="{{ asset('resources/admin/assets/js/select2.full.min.js') }}"></script>
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
 <script src="{{ asset('resources/admin/assets/vendors/moment/moment.js')}}"></script>
@@ -135,6 +134,8 @@
 <script src="{{ asset('resources/admin/assets/js/vue/components.js?time=').time() }}"></script>
 <script  src="{{ asset('js/vendor/ckeditor/ckeditor.js')}}"></script>
 <script  src="{{ asset('js/vendor/ckeditor/adapters/jquery.js')}}"></script>
+<script  src="{{ asset('vendor/bootstrap-select-1.13.14/dist/js/bootstrap-select.min.js')}}"></script>
+
 @yield('script')
 <script src="{{ asset('resources/admin/assets/js/custom.js?time=').time() }}"></script>
 <script>

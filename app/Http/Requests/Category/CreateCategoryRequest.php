@@ -27,7 +27,6 @@ class CreateCategoryRequest extends ApiRequest
     {
         return [
             'name' => 'required',
-            'alias' => 'bail|required|unique:alias',
             'alias' => [
                 'bail',
                 'required',
