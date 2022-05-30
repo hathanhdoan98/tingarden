@@ -111,6 +111,11 @@ return [
             'permission' => 0777,
             'path' => storage_path('logs/mysql/log_query.log'),
         ],
+        'log_cronjob' => [
+            'driver' => 'daily',
+            'permission' => 0777,
+            'path' => storage_path('logs/cronjob/cronjob.log'),
+        ],
     ],
 
 ];

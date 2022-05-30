@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Repositories\SettingRepository;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Carbon;
 
 class SettingService
 {
@@ -46,7 +47,9 @@ class SettingService
             $dataCreate[] = [
                 'key' => $setting['key'], 
                 'value' => $setting['value'], 
-                'type' => $setting['type'] ?? config('setting.type.web') 
+                'type' => config("setting.type." . $setting['type']),
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
             ];
         }
         $this->settingRepository->insertSettings($dataCreate);

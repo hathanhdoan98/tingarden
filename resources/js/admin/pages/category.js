@@ -10,7 +10,8 @@ import {
     openCreateModal,
     closeCreateModal,
     clearCreateData,
-    validateFormData
+    validateFormData,
+    getResponseMessage
 } from '../create-data.js';
 
 import {
@@ -133,14 +134,16 @@ $(document).delegate('#btn-create', 'click', function (e) {
             closeCreateModal();
         }
         var failCallback = function (response) {
-            var messages = response.responseJSON.message;
+            response = response.responseJSON;
+            var messages = response.message ? response.message : 'Thất bại';
             for(let i in messages){
                 let inputElm = $('#create-data-form input[name="'+ i +'"]');
                 if(inputElm.length){
                     $(createErrorMessage(messages[i])).insertAfter(inputElm);
                 }
             }
-            showNotification('Thất bại!!', 'danger');
+            messages = getResponseMessage(messages);
+            showNotification(messages, 'danger');
         }
 
         sendFormData(

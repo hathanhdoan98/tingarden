@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Models\Product;
 use App\Repositories\AbstractEloquentRepository;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -38,6 +39,30 @@ class ProductRepository extends AbstractEloquentRepository
     }
 
     /**
+     * @param array $ids
+     * @return Collection|null
+     */
+    public function findProductByids(array $ids): ?Collection
+    {
+        return $this->findBy(
+            [
+                'filter' => [
+                    'id' => $ids
+                ],
+            ],
+            function (Builder $builder) {
+                return $builder->with([
+                    'images' => function ($q) {
+                        $q->orderBy('index', 'ASC');
+                    },
+                    'alias'
+                ]);
+            },
+            false
+        );
+    }
+
+    /**
      * @param array $searchCriteria
      * @return Model|null
      */
@@ -50,7 +75,8 @@ class ProductRepository extends AbstractEloquentRepository
                     'images' => function ($q) {
                         $q->orderBy('index', 'ASC');
                     },
-                    'category'
+                    'category',
+                    'alias'
                 ]);
             }
         );

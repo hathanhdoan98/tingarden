@@ -1,0 +1,45 @@
+.system_message {
+    position: fixed;
+    right: 15px;
+    top: 15px;
+    transition: all 0.3s;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    -o-transition: all 0.3s;
+    transform: translate(115%, 0);
+    -webkit-transform: translate(115%, 0);
+    -moz-transform: translate(115%, 0);
+    -o-transform: translate(115%, 0);
+    width: 270px;
+    padding: 10px 15px;
+    z-index: 9999;
+    border-radius: 3px;
+    color: #fff;
+}
+
+.system_message.show {
+    transform: translate(0%, 0);
+    -webkit-transform: translate(0%, 0);
+    -moz-transform: translate(0%, 0);
+    -o-transform: translate(0%, 0);
+}
+
+.system_message.info {
+    background: #5ecafb;
+    border: 1px solid #3eb5ea;
+}
+
+.system_message.success {
+    background: #02984d;
+    border: 1px solid #0b7540;
+}
+
+.system_message.danger {
+    background: #e65449;
+    border: 1px solid #d64d42;
+}
+
+.system_message.warning {
+    background: #ffbb56;
+    border: 1px solid #d8922b;
+}

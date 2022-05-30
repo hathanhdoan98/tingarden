@@ -29,19 +29,19 @@ function createSlug(slug, space = '-') {
 /**
  * Format number to money
  * @param value
+ * @param string|null currencyUnit
  * @return int|float
  */
-function formatMoney(value) {
-    if (value == '' || value == null) {
-        return 0;
-    }
-    var text = String(value).floatText()
-    var splice = String(text).split('.');
-    var result = String(splice[0]).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    if (splice.length > 1) {
-        result += '.' + splice[1].substr(0, 2);
-    }
-    return result;
+ function formatMoney(value, currencyUnit = '') {
+     value = value ? value : 0;
+     var text = value.toString();
+     var splice = text.split('.');
+     var result = splice[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+     if (splice.length > 1) {
+         result += '.' + splice[1].substr(0, 2);
+     }
+     result = currencyUnit ? result + " " + currencyUnit.trim() : result;
+     return result;
 }
 
 /**
@@ -224,6 +224,31 @@ function keyBy(key ,arr){
     return result;
 }
 
+/**
+ * 
+ * @param message 
+ * @returns string
+ */
+ function getResponseMessage(message){
+    if(typeof message == 'object'){
+        for(let i in message){
+            if(typeof message[i] == 'object'){
+                return getResponseMessage(message[i]);
+            }
+            return message[i];
+        }
+    }
+    return message;
+}
+
+function showLoading(){
+    $(".fa-spinner").css('display','inline-block');
+}
+
+function hideLoading(){
+    $(".fa-spinner").css('display','none');
+}
+
 export {
     createSlug,
     formatMoney,
@@ -239,5 +264,8 @@ export {
     removeAllErrorMessage,
     activeBtnStatus,
     removeArrayElement,
-    keyBy
+    keyBy,
+    getResponseMessage,
+    showLoading,
+    hideLoading
 }

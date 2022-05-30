@@ -26,6 +26,7 @@ class ProductResource extends JsonResource
             'search' => $this->search,
             'price' => $this->price,
             'sale_off_price' => $this->sale_off_price,
+            'discount' => round(100 - ($this->sale_off_price * 100 / $this->price)),
             'rate' => $this->rate,
             'total_rate' => $this->total_rate,
             'status' => $this->status,
@@ -34,7 +35,8 @@ class ProductResource extends JsonResource
             'formatted_updated_at' => $this->formatted_updated_at ?? Carbon::parse($this->updated_at)->format(config('common.date_format')),
             'images' => $this->relationLoaded('images') ?
                 ImageResource::collection($this->whenLoaded('images'))->toArray($request) : [],
-            'category' => $this->relationLoaded('category') ? $this->category : null
+            'category' => $this->relationLoaded('category') ? $this->category : null,
+            'alias' => $this->relationLoaded('alias') ? $this->alias : null,
         ];
     }
 }

@@ -109,32 +109,32 @@
 </body>
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
-
+{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script> --}}
 <script src="{{ asset('resources/admin/assets/vendors/js/vendor.bundle.base.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.js"></script>
 {{--<script src="../../resources/admin/assets/js/off-canvas.js"></script>--}}
 
 
-<script src="{{ asset('resources/admin/assets/js/hoverable-collapse.js') }}"></script>
+{{-- <script src="{{ asset('resources/admin/assets/js/hoverable-collapse.js') }}"></script> --}}
 <script src="{{ asset('resources/admin/assets/js/misc.js?time=').time() }}"></script>
 
 
-<script src="{{ asset('resources/admin/assets/js/lodash.min.js') }}"></script>
-<script src="{{ asset('resources/admin/assets/js/todolist.js') }}"></script>
+{{-- <script src="{{ asset('resources/admin/assets/js/lodash.min.js') }}"></script>
+<script src="{{ asset('resources/admin/assets/js/todolist.js') }}"></script> --}}
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
-<script src="{{ asset('resources/admin/assets/vendors/moment/moment.js')}}"></script>
+{{-- <script src="{{ asset('resources/admin/assets/vendors/moment/moment.js')}}"></script> --}}
 <script src="{{ asset('resources/admin/assets/vendors/daterangepicker/daterangepicker.min.js') }}"></script>
-<script src="{{ asset('resources/admin/assets/js/vue/vue.js') }}"></script>
+{{-- <script src="{{ asset('resources/admin/assets/js/vue/vue.js') }}"></script>
 <script src="{{ asset('resources/admin/assets/js/vue/vee-validate.js') }}"></script>
 <script src="{{ asset('resources/admin/assets/js/vue/vi.js') }}"></script>
 <script src="{{ asset('resources/admin/assets/js/helper.js') }}"></script>
 <script src="{{ asset('resources/admin/assets/js/vue/vue-filter.js') }}"></script>
-<script src="{{ asset('resources/admin/assets/js/vue/components.js?time=').time() }}"></script>
+<script src="{{ asset('resources/admin/assets/js/vue/components.js?time=').time() }}"></script> --}}
 <script  src="{{ asset('js/vendor/ckeditor/ckeditor.js')}}"></script>
 <script  src="{{ asset('js/vendor/ckeditor/adapters/jquery.js')}}"></script>
 <script  src="{{ asset('vendor/bootstrap-select-1.13.14/dist/js/bootstrap-select.min.js')}}"></script>
+<script src="https://cdn.jsdelivr.net/gh/AmagiTech/JSLoader/amagiloader.js"></script>
 
 @yield('script')
 <script src="{{ asset('resources/admin/assets/js/custom.js?time=').time() }}"></script>
@@ -146,7 +146,7 @@
             "{{ route('api.upload.ckeditor') . '?_token=' . csrf_token() }}";
     })
 </script>
-<script>
+{{-- <script>
     var changePassword = new objectChangePassword('#object-change-password');
 
     function objectChangePassword(element) {
@@ -200,5 +200,5 @@
         });
         return this;
     }
-</script>
+</script> --}}
 </html>

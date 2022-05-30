@@ -137,10 +137,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "clearCreateData": () => (/* binding */ clearCreateData),
 /* harmony export */   "closeCreateModal": () => (/* binding */ closeCreateModal),
+/* harmony export */   "getResponseMessage": () => (/* binding */ getResponseMessage),
 /* harmony export */   "openCreateModal": () => (/* binding */ openCreateModal),
 /* harmony export */   "validateFormData": () => (/* binding */ validateFormData)
 /* harmony export */ });
 /* harmony import */ var _common_helper_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../common/helper.js */ "./resources/js/common/helper.js");
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+
 
 
 __webpack_require__(/*! ../common/define.js */ "./resources/js/common/define.js"); // =========================FUNCTION=============================
@@ -212,6 +215,26 @@ function validateFormData() {
   });
   return isValid;
 }
+/**
+ * 
+ * @param message 
+ * @returns string
+ */
+
+
+function getResponseMessage(message) {
+  if (_typeof(message) == 'object') {
+    for (var i in message) {
+      if (_typeof(message[i]) == 'object') {
+        return getResponseMessage(message[i]);
+      }
+
+      return message[i];
+    }
+  }
+
+  return message;
+}
 
 
 
@@ -235,10 +258,10 @@ __webpack_require__.r(__webpack_exports__);
  * @param url
  * @param callback
  * @param callBackError
+ * @param isSkipLoading
  * @param currentRequest
- * @param isSkipLoadingStop
  */
-function sendRequest(method, payload, url, callback, callBackError, currentRequest) {
+function sendRequest(method, payload, url, callback, callBackError, isSkipLoading, currentRequest) {
   $.ajaxSetup({
     cache: false
   });
@@ -252,15 +275,27 @@ function sendRequest(method, payload, url, callback, callBackError, currentReque
       'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     },
     success: function success(response) {
+      if (typeof AmagiLoader != 'undefined') {
+        AmagiLoader.hide();
+      }
+
       callback(response);
     },
     beforeSend: function beforeSend() {
-      //Cancel request if multiple same api called on the same time
+      if (!isSkipLoading && typeof AmagiLoader != 'undefined') {
+        AmagiLoader.show();
+      } //Cancel request if multiple same api called on the same time
+
+
       if (currentRequest) {
         currentRequest.abort();
       }
     },
     error: function error(response) {
+      if (typeof AmagiLoader != 'undefined') {
+        AmagiLoader.hide();
+      }
+
       if (callBackError) {
         callBackError(response);
       }
@@ -325,6 +360,10 @@ window._SORT_KEY = 'created_at';
 window._SORT_VAL = 0; //0:desc, 1: asc
 
 window._DEFAULT_IMAGE = '/images/default-image.png';
+window._SORT = {
+  desc: 0,
+  asc: 1
+};
 
 /***/ }),
 
@@ -343,6 +382,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "formatDate": () => (/* binding */ formatDate),
 /* harmony export */   "formatMoney": () => (/* binding */ formatMoney),
 /* harmony export */   "formatNumber": () => (/* binding */ formatNumber),
+/* harmony export */   "getResponseMessage": () => (/* binding */ getResponseMessage),
+/* harmony export */   "hideLoading": () => (/* binding */ hideLoading),
 /* harmony export */   "keyBy": () => (/* binding */ keyBy),
 /* harmony export */   "randomCharacter": () => (/* binding */ randomCharacter),
 /* harmony export */   "randomNumber": () => (/* binding */ randomNumber),
@@ -350,9 +391,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "removeAllErrorMessage": () => (/* binding */ removeAllErrorMessage),
 /* harmony export */   "removeArrayElement": () => (/* binding */ removeArrayElement),
 /* harmony export */   "setURLSearchParam": () => (/* binding */ setURLSearchParam),
+/* harmony export */   "showLoading": () => (/* binding */ showLoading),
 /* harmony export */   "showNotification": () => (/* binding */ showNotification),
 /* harmony export */   "sliceContent": () => (/* binding */ sliceContent)
 /* harmony export */ });
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+
 /**
  * Slug a string
  * @param slug
@@ -386,23 +430,23 @@ function createSlug(slug) {
 /**
  * Format number to money
  * @param value
+ * @param string|null currencyUnit
  * @return int|float
  */
 
 
 function formatMoney(value) {
-  if (value == '' || value == null) {
-    return 0;
-  }
-
-  var text = String(value).floatText();
-  var splice = String(text).split('.');
-  var result = String(splice[0]).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  var currencyUnit = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+  value = value ? value : 0;
+  var text = value.toString();
+  var splice = text.split('.');
+  var result = splice[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
   if (splice.length > 1) {
     result += '.' + splice[1].substr(0, 2);
   }
 
+  result = currencyUnit ? result + " " + currencyUnit.trim() : result;
   return result;
 }
 /**
@@ -616,6 +660,34 @@ function keyBy(key, arr) {
   });
   return result;
 }
+/**
+ * 
+ * @param message 
+ * @returns string
+ */
+
+
+function getResponseMessage(message) {
+  if (_typeof(message) == 'object') {
+    for (var i in message) {
+      if (_typeof(message[i]) == 'object') {
+        return getResponseMessage(message[i]);
+      }
+
+      return message[i];
+    }
+  }
+
+  return message;
+}
+
+function showLoading() {
+  $(".fa-spinner").css('display', 'inline-block');
+}
+
+function hideLoading() {
+  $(".fa-spinner").css('display', 'none');
+}
 
 
 
@@ -820,7 +892,8 @@ $(document).delegate('#btn-create', 'click', function (e) {
     };
 
     var failCallback = function failCallback(response) {
-      var messages = response.responseJSON.message;
+      response = response.responseJSON;
+      var messages = response.message ? response.message : 'Thất bại';
 
       for (var _i in messages) {
         var inputElm = $('#create-data-form input[name="' + _i + '"]');
@@ -830,7 +903,8 @@ $(document).delegate('#btn-create', 'click', function (e) {
         }
       }
 
-      (0,_common_helper_js__WEBPACK_IMPORTED_MODULE_0__.showNotification)('Thất bại!!', 'danger');
+      messages = (0,_create_data_js__WEBPACK_IMPORTED_MODULE_1__.getResponseMessage)(messages);
+      (0,_common_helper_js__WEBPACK_IMPORTED_MODULE_0__.showNotification)(messages, 'danger');
     };
 
     (0,_common_ajax_js__WEBPACK_IMPORTED_MODULE_3__.sendFormData)('POST', fd, apiCreate, successCallback, failCallback);

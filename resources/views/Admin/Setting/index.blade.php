@@ -50,7 +50,7 @@
                         <div class="card-body">
                             <h3 class="card-title text-center">Cài đặt web</h3>
                             <hr>
-                            <form>
+                            <form class="setting-form">
                                 <div class="form-group">
                                     <label for="phone" class="font-weight-bold">SĐT</label>
                                     <input name="phone" value="{{ $settings['phone']['value'] ?? '' }}" type="text" class="form-control">
@@ -183,7 +183,7 @@
             </div>
             <hr>
             <div class="setting-detail-footer">
-                <button type="button" @click.stop.prevent="createOrUpdate('admin')" class="btn-add">Lưu thay đổi
+                <button type="button" class="btn-add">Lưu thay đổi
                 </button>
                 <button type="button" class="btn-back"> Quay lại cấu hình
                 </button>
@@ -224,7 +224,7 @@
             </div>
             <hr>
             <div class="setting-detail-footer">
-                <button type="button" @click.stop.prevent="createOrUpdate('payment')" class="btn-add">Lưu thay đổi
+                <button type="button" class="btn-add">Lưu thay đổi
                 </button>
                 <button type="button"
                     class="btn-back"> Quay lại cấu hình</button>
@@ -235,8 +235,11 @@
     </div>
 @endsection
 @section('script')
-    <script src="{{ asset('/js/admin/setting.js') }}"></script>
     <script>
+        var apiUpdate = "{{ route('admin.setting.update') }}";
+    </script>
+    <script src="{{ asset('/js/admin/setting.js') }}"></script>
+    {{-- <script>
         var setting = new objectSetting('#object-setting');
 
         function objectSetting(element) {
@@ -385,5 +388,5 @@
             });
             return this;
         }
-    </script>
+    </script> --}}
 @endsection

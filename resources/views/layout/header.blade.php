@@ -1,3 +1,11 @@
+@php
+$categories = $categories ?? [];
+$subCategories1 = array_slice($categories, 0, 3);
+$subCategories2 = array_slice($categories, 3);
+
+$carts = \request()->session()->get('carts', []);
+$totalCarts = array_sum($carts);
+@endphp
 <section class="section-head bg-white clearfix">
 
     <div class="container">
@@ -12,8 +20,8 @@
 
                         <a href="" title="home">
 
-                            <img src="resize/155x105/1/upload/hinhanh/logo-hasu-501.png"
-                                 alt="" onerror='this.src="images/no-image.jpg"'/>
+                            <img src="resize/155x105/1/upload/hinhanh/logo-hasu-501.png" alt=""
+                                onerror='this.src="images/no-image.jpg"' />
                         </a>
 
                     </div>
@@ -25,7 +33,7 @@
                         class="box-search-header menu-sticky-mobile ds-flex flex-align-center flex-center mb-15 mg-0i mt-10i">
                         <div class="thumb-banner">
                             <a href="" title="">
-                                <img src="upload/hinhanh/hasu-thay-loi-3139.png" alt=""/>
+                                <img src="upload/hinhanh/hasu-thay-loi-3139.png" alt="" />
                             </a>
                         </div>
                     </div>
@@ -35,9 +43,9 @@
                         <div class="box-flex">
                             <div class="cart-header ds-flex flex-align-center flex-space">
                                 <div class="box-lang ds-flex flex-align-center cs-pointer"
-                                     onclick="window.location.href='gio-hang.html'">
+                                    onclick="window.location.href='gio-hang.html'">
                                     <div class="thumb-cart p-relative">
-                                        <img src="images/cart.png" width="25" alt="cart"/>
+                                        <img src="images/cart.png" width="25" alt="cart" />
                                         <!-- <span id="view-header">0</span> -->
                                     </div>
                                     <div class="desc-cart-header ml-5">
@@ -84,7 +92,8 @@
                                     </a>
                                     <span></span>
                                 </div>
-                                <nav class="content" itemscope itemtype="http://schema.org/SiteNavigationElement">
+                                <nav class="content" itemscope
+                                    itemtype="http://schema.org/SiteNavigationElement">
                                     <ul class="clearfix">
                                         <li class="p-relative">
                                             <div class="lang-top lang-mobile ds-flex flex-center">
@@ -92,16 +101,19 @@
                                                 <a href="lang/en" class="" title="Tiếng anh">EN</a>
                                             </div>
                                         </li>
-                                        @if(!empty($categories))
-                                            @foreach($categories as $category)
-                                                <li class="p-relative">
-                                                    <a itemprop="url" href="lien-he" title="{{$category['name']}}"
-                                                       class="">
-                                                        <span itemprop="name">{{$category['name']}}</span>
-                                                    </a>
-                                                </li>
-                                            @endforeach
-                                        @endif
+                                        <li class="p-relative">
+                                            <a itemprop="url" href="all-product" title="Tất cả" class="">
+                                                <span itemprop="name">Xem tất cả</span>
+                                            </a>
+                                        </li>
+                                        @foreach ($categories as $category)
+                                            <li class="p-relative">
+                                                <a itemprop="url" href="{{ $category['alias']['alias'] ?? '' }}"
+                                                    title="{{ $category['name'] ?? '' }}" class="">
+                                                    <span itemprop="name">{{ $category['name'] ?? '' }}</span>
+                                                </a>
+                                            </li>
+                                        @endforeach
                                         <li class="p-relative">
                                             <a itemprop="url" href="tin-tuc" title="Tin tức" class="">
                                                 <span itemprop="name">Tin tức</span>
@@ -118,82 +130,95 @@
                             </div>
                         </div>
                         <ul class="ul-menu mg-0 none-mobile">
-                            @if(!empty($categories1))
-                                @foreach($categories1 as $index=>$category)
-                                    <li class=" p-relative">
-                                        <a class="dropdown-holder" itemprop="url" href="bo-sinh-nhat" title="Hoa bó">
-                                            <span itemprop="name">{{$category['name']}}</span>
-                                        </a>
-                                        @if($index==5 && $categories2)
-                                            <div class="mega-menu pos-menu-c1 before-menu after-menu">
-                                                <div class="box-mega-menu">
-                                                    <ul class="c1">
-                                                        @foreach($categories2 as $category2)
-                                                            <li class="p-relative">
-                                                                <a itemprop="url" href="gia-duoi-500000d" title="Giá dưới 500.000đ">
-                                                                    <span itemprop="name">{{$category2['name']}}</span>
-                                                                </a>
-                                                            </li>
-                                                        @endforeach
-                                                    </ul>
-                                                </div>
-
-                                            </div>
-                                        @endif
-                                    </li>
-                                @endforeach
-                            @endif
                             <li class=" p-relative">
-                                <a itemprop="url" href="tin-tuc" title="Tin tức">
-                                    <span itemprop="name">Tin tức</span>
+                                <a itemprop="url" href="all-product" title="Tất cả sản phẩm">
+                                    <span itemprop="name">Tất cả sản phẩm</span>
                                 </a>
                             </li>
+                            @foreach ($subCategories1 as $index => $subCategory1)
+                                <li class=" p-relative">
+                                    <a class="dropdown-holder" itemprop="url"
+                                        href="{{ $subCategory1['alias']['alias'] ?? '' }}"
+                                        title="{{ $subCategory1['name'] ?? '' }}">
+                                        <span itemprop="name">{{ $subCategory1['name'] ?? '' }}</span>
+                                    </a>
+                                </li>
+                            @endforeach
+                            @if ($subCategories2)
+                                <li class=" p-relative">
+                                    <a class="dropdown-holder" itemprop="url" href="" title="Xem thêm">
+                                        <span itemprop="name">Xem thêm <i class="fa fa-angle-down" aria-hidden="true"></i></span>
+                                    </a>
+                                    <div class="mega-menu pos-menu-c1 before-menu after-menu">
+                                        <div class="box-mega-menu">
+                                            <ul class="c1">
+                                                @foreach ($subCategories2 as $subCategory2)
+                                                    <li class="p-relative">
+                                                        <a itemprop="url"
+                                                            href="{{ $subCategory2['alias']['alias'] ?? '' }}"
+                                                            title="{{ $subCategory2['name'] ?? '' }}">
+                                                            <span
+                                                                itemprop="name">{{ $subCategory2['name'] ?? '' }}</span>
+                                                        </a>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
 
-                            <li class=" p-relative">
-
-
-                                <a itemprop="url" href="lien-he" title="Liên hệ">
-
-                                    <span itemprop="name">Liên hệ</span>
-
-                                </a>
-
-
+                                    </div>
                             </li>
+                        @endif
+                        <li class=" p-relative">
+                            <a itemprop="url" href="tin-tuc" title="Tin tức">
+                                <span itemprop="name">Tin tức</span>
+                            </a>
+                        </li>
 
-                        </ul>
+                        <li class=" p-relative">
 
-                    </div>
+
+                            <a itemprop="url" href="lien-he" title="Liên hệ">
+
+                                <span itemprop="name">Liên hệ</span>
+
+                            </a>
+
+
+                        </li>
+
+                    </ul>
 
                 </div>
-                <div class="col-md-3 col-sm-3 col-10 col-80i col-xs-12">
 
-                    <div class="ds-flex flex-center flex-wrap-i">
-                        <div class="cart-mobile none-desktop ds-mobile">
-                            <div class="thumb-cart-m p-relative" onclick="window.location.href='gio-hang.html'">
-                                <img src="images/cart_m.png" width="25" alt="cart"/>
-                                <span id="view-header">0</span>
-                            </div>
+            </div>
+            <div class="col-md-3 col-sm-3 col-10 col-80i col-xs-12">
+
+                <div class="ds-flex flex-center flex-wrap-i">
+                    <div class="cart-mobile none-desktop ds-mobile">
+                        <div class="thumb-cart-m p-relative" onclick="window.location.href='gio-hang.html'">
+                            <img src="images/cart_m.png" width="25" alt="cart" />
+                            <span id="view-header">{{ $totalCarts ?? 0 }}</span>
                         </div>
-                        <div class="ic-search-menu p-relative cs-pointer">
-                            <i class="fa fa-search none-mobile" aria-hidden="true"></i>
-                            <div class="form-search ds-flex flex-end p-relative">
+                    </div>
+                    <div class="ic-search-menu p-relative cs-pointer">
+                        <i class="fa fa-search none-mobile" aria-hidden="true"></i>
+                        <div class="form-search ds-flex flex-end p-relative">
 
-                                <input type="text" name="keywords" id="keywords" value="" placeholder="Tìm kiếm...">
+                            <input type="text" name="keywords" id="keywords" value="" placeholder="Tìm kiếm...">
 
-                                <button class="button-search" type="submit"><i class="fa fa-search"
-                                                                               aria-hidden="true"></i></button>
+                            <button class="button-search" type="submit"><i class="fa fa-search"
+                                    aria-hidden="true"></i></button>
 
-                            </div>
                         </div>
-
                     </div>
 
                 </div>
 
             </div>
-        </div>
 
+        </div>
     </div>
+
+</div>
 
 </nav>

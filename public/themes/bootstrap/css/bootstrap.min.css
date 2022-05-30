@@ -5654,7 +5654,8 @@ fieldset[disabled] .navbar-inverse .btn-link:hover {
 }
 
 .pagination>li {
-    display: inline
+    display: inline;
+    cursor: pointer;
 }
 
 .pagination>li>a,

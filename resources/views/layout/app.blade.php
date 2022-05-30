@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="utf-8">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <base href="http://dev.tingarden.com/">
 
@@ -80,6 +81,7 @@
     <link href="themes/css/menu.mobile.css" rel="stylesheet">
     <link href="themes/css/style.css" rel="stylesheet">
     <link href="themes/css/themes.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/notification.css') }}">
     <style>
         :root {
             --html-bg-website: #F59FAC;
@@ -948,6 +950,11 @@
         <div class="arcontactus-prompt-inner"></div>
     </div>
 </div>
+
+<div class="system_message">
+    <div class="title">Cập nhật thành công</div>
+</div>
+
 <script type="text/javascript">
     var arCuMessages = ["Hasu Flora"];
     var arCuLoop = false;
@@ -1033,6 +1040,8 @@
     <span class="tel">07989 12 383</span>
 </address>
 <script>
+    var apiAddToCart = "{{ route('web.cart.add') }}";
+
     var class_ = 'theme-default';
     var color_ = '37a000';
     var chart_order;
@@ -1058,6 +1067,8 @@
 <script src="themes/js/functions.js"></script>
 <script src="themes/js/api.js"></script>
 <script src="themes/js/app.js"></script>
+<script src="js/web/web.js"></script>
+@yield('script')
 </body>
 
 </html>

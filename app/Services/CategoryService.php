@@ -78,7 +78,8 @@ class CategoryService
         }
         $searchCriteria = [
             'sort' => 'name',
-            "filter" => $filter
+            "filter" => $filter,
+            'relations' => ['alias']
         ];
         return $this->categoryRepository->findBy(
             $searchCriteria, null, false

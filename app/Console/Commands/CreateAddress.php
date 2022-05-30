@@ -7,6 +7,7 @@ use App\Models\District;
 use App\Models\Province;
 use App\Models\Ward;
 use Illuminate\Console\Command;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -43,63 +44,73 @@ class CreateAddress extends Command
      */
     public function handle()
     {
-        $address_list = Excel::toArray(new AddressImport, public_path('Export-Adress.xlsx'));
-        $address_list = $address_list[0];
-        foreach ($address_list as $index => $address) {
-            if ($index == 0) {
-                continue;
+        try{
+            $data = curlRequest('https://provinces.open-api.vn/api/?depth=3', 'GET');
+            $data = json_decode($data);
+            $provinces = $districts = $wards = [];
+            if ($data) {
+                Province::whereNotNull('id')->delete();
+                District::whereNotNull('id')->delete();
+                Ward::whereNotNull('id')->delete();
+                foreach ($data as $province) {
+                    $provinceName = $province->name;
+                    $regex = preg_match('/(Tỉnh|Thành phố)(.*)/i', $provinceName, $output_array);
+                    if ($regex) {
+                        $provinceName = $output_array[2];
+                    }
+                    $provinces[] = [
+                        'name' => $provinceName,
+                        'search' => Str::slug($provinceName, ' '),
+                        'alias' => Str::slug($provinceName, '-'),
+                        'province_id' => $province->code,
+                        'province_code' => $province->code,
+                        'code' => $province->code,
+                        'status' => config('common.status.active'),
+                        'created_at' => Carbon::now()->toDateTimeString(),
+                        'updated_at' => Carbon::now()->toDateTimeString(),
+                    ];
+                    foreach ($province->districts as $district) {
+                        $districts[] = [
+                            'name' => $district->name,
+                            'search' => Str::slug($district->name, ' '),
+                            'alias' => Str::slug($district->name, '-'),
+                            'district_id' => $district->code,
+                            'district_code' => $district->code,
+                            'province_code' => $province->code,
+                            'code' => $province->code,
+                            'status' => config('common.status.active'),
+                            'created_at' => Carbon::now()->toDateTimeString(),
+                            'updated_at' => Carbon::now()->toDateTimeString(),
+                        ];
+                        foreach ($district->wards as $ward) {
+                            $wards[] = [
+                                'name' => $ward->name,
+                                'search' => Str::slug($ward->name, ' '),
+                                'alias' => Str::slug($ward->name, '-'),
+                                'ward_id' => $ward->code,
+                                'ward_code' => $ward->code,
+                                'district_code' => $district->code,
+                                'code' => $ward->code,
+                                'status' => config('common.status.active'),
+                                'created_at' => Carbon::now()->toDateTimeString(),
+                                'updated_at' => Carbon::now()->toDateTimeString(),
+                            ];
+                        }
+                    }
+                }
+                Province::insert($provinces);
+                foreach(array_chunk($districts, 50) as $chunk){
+                    District::insert($chunk);
+                }
+                foreach(array_chunk($wards, 50) as $chunk){
+                    Ward::insert($chunk);
+                }
+                writeLog('log_cronjob', 'Crawl address success');
+            } else {
+                writeLog('log_cronjob', 'Api crawl address (https://provinces.open-api.vn/api) doesnt work', LOG_LEVEL_ERROR);
             }
-            $data_create_province = [
-                'name' => $address[0],
-                'search' => Str::slug($address[0],' '),
-                'alias' => Str::slug($address[0],'-'),
-            ];
-            $province = Province::where('name', $data_create_province['name'])->first();
-            if(!$province){
-                $province = Province::create($data_create_province);
-            }
-
-            $alias_district = $district_name = $address[1];
-            if (preg_match('/(.*)(\(.*\))/i', $alias_district, $output_array)) {
-                $alias_district = $district_name = $output_array[1];
-            }
-            $regex = preg_match('/(Quận|Huyện Đảo|Huyện|Thành phố|Thị xã)(.*)/i', $alias_district, $output_array);
-            if ($regex) {
-                $alias_district = $output_array[2];
-            }
-            $data_create_district = [
-                'name' => $district_name,
-                'code' => $address[1],
-                'search' => Str::slug($alias_district,' '),
-                'alias' => Str::slug($alias_district,'-'),
-                'province_id' => $province['id']
-            ];
-            $district = District::where('province_id', $province['id'])->where('name', $data_create_district['name'])->first();
-            if(!$district){
-                $district = District::create($data_create_district);
-            }
-
-            $alias_ward = $ward_name= $address[2];
-            if (preg_match('/(.*)(-.*)/i', $alias_ward, $output_array)) {
-                $alias_ward = $ward_name = $output_array[1];
-            }
-            $regex = preg_match('/(Xã|Phường|Thị trấn|Huyện Đảo)(.*)/i', $alias_ward, $output_array);
-            if ($regex) {
-                $alias_ward = $output_array[2];
-            }
-            $data_create_ward = [
-                'name' => $ward_name,
-                'code' => $address[2],
-                'search' => Str::slug($alias_ward,' '),
-                'alias' => Str::slug($alias_ward,'-'),
-                'district_id' => $district['id']
-            ];
-            $ward = Ward::where('district_id',$district['id'])->where('code', $data_create_ward['code'])->first();
-            if(!$ward){
-                $ward = Ward::create($data_create_ward);
-            }
-            echo $index .PHP_EOL;
+        }catch(\Exception $e){
+            writeLog('log_cronjob', $e->getMessage(), LOG_LEVEL_ERROR);
         }
-        echo 'DONE';
     }
 }

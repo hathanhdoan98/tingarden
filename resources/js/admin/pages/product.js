@@ -11,7 +11,8 @@ import {
     openCreateModal,
     closeCreateModal,
     clearCreateData,
-    validateFormData
+    validateFormData,
+    getResponseMessage
 } from '../create-data.js';
 
 import {
@@ -43,6 +44,10 @@ $(document).delegate('.btn-inactive', 'click', function (e) {
 // Change status = 1
 $(document).delegate('.btn-active', 'click', function (e) {
     adminObject.changeStatus($(this).data('id'), 1);
+})
+// sale_off_price = price
+$(document).delegate(':input[name="price"]', 'keyup', function (e) {
+    $(':input[name="sale_off_price"]').val($(this).val());
 })
 // remove images
 $(document).delegate('.remove-image', 'click', function (e) {
@@ -129,7 +134,7 @@ $(document).delegate('#btn-create', 'click', function (e) {
         for (let i in removedImages){
             fd.append('remove_images[]', removedImages);
         }
-        
+
         var successCallback = function (response) {
             removedImages = [];
             showNotification(response.message, 'success');
@@ -139,14 +144,16 @@ $(document).delegate('#btn-create', 'click', function (e) {
             closeCreateModal();
         }
         var failCallback = function (response) {
-            var messages = response.responseJSON.message;
+            response = response.responseJSON;
+            var messages = response.message ? response.message : 'Thất bại';
             for(let i in messages){
                 let inputElm = $('#create-data-form input[name="'+ i +'"]');
                 if(inputElm.length){
                     $(createErrorMessage(messages[i])).insertAfter(inputElm);
                 }
             }
-            showNotification('Thất bại!!', 'danger');
+            messages = getResponseMessage(messages);
+            showNotification(messages, 'danger');
         }
 
         sendFormData(

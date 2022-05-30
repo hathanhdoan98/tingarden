@@ -4,8 +4,8 @@
  * @param url
  * @param callback
  * @param callBackError
+ * @param isSkipLoading
  * @param currentRequest
- * @param isSkipLoadingStop
  */
 function sendRequest(
     method,
@@ -13,6 +13,7 @@ function sendRequest(
     url,
     callback,
     callBackError,
+    isSkipLoading,
     currentRequest,
 ) {
     $.ajaxSetup({
@@ -28,15 +29,24 @@ function sendRequest(
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
         success: function (response) {
-            callback(response)
+            if(typeof AmagiLoader != 'undefined'){
+                AmagiLoader.hide();
+            }
+            callback(response);
         },
         beforeSend: function () {
+            if(!isSkipLoading && typeof AmagiLoader != 'undefined'){
+                AmagiLoader.show();
+            }
             //Cancel request if multiple same api called on the same time
             if (currentRequest) {
                 currentRequest.abort();
             }
         },
         error: function (response) {
+            if(typeof AmagiLoader != 'undefined'){
+                AmagiLoader.hide();
+            }
             if (callBackError) {
                 callBackError(response)
             }

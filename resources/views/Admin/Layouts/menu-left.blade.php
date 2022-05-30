@@ -10,7 +10,7 @@
 
 
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('admin.payment_method.index') }}">
+                <a class="nav-link" href="#">
                     <span class="menu-title">Hình thức thanh toán</span>
                     <i class="mdi  mdi-crosshairs-gps menu-icon"></i>
                 </a>
@@ -73,7 +73,7 @@
 
 
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('admin.page.index') }}">
+                <a class="nav-link" href="#">
                     <span class="menu-title">Trang</span>
                     <i class="mdi mdi-note-outline menu-icon"></i>
                 </a>

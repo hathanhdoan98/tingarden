@@ -11,7 +11,7 @@ class Ward extends Model
     use HasFactory;
 
     protected $fillable = [
-        'district_id',
+        'district_code',
         'name',
         'search',
         'alias',
@@ -19,8 +19,6 @@ class Ward extends Model
         'ward_code',
         'code',
         'status',
-        'create_at',
-        'update_at',
     ];
 
     public $timestamps = true;

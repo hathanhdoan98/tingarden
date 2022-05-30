@@ -1,9 +1,12 @@
 {
-    "/js/admin/admin.js": "/js/admin/admin.js?id=82316749874fcfdcac2e1fc352c6d351",
-    "/js/admin/create-data.js": "/js/admin/create-data.js?id=844fab3d97cbc2bfd9fee9c7b3957780",
-    "/js/admin/listing.js": "/js/admin/listing.js?id=f5c41fa32c360856b606a543bf7809e7",
-    "/js/admin/category.js": "/js/admin/category.js?id=6422917d5baaf8d11b10ad70a766ab53",
-    "/js/admin/post.js": "/js/admin/post.js?id=d3697c49f2f7c3df7584a82e8a1f06cc",
-    "/js/admin/product.js": "/js/admin/product.js?id=364fb41a90a07387cbbf293ab3901586",
-    "/js/admin/setting.js": "/js/admin/setting.js?id=bf4caeca9132504c2ca87fe829495fb4"
+    "/js/admin/admin.js": "/js/admin/admin.js?id=d946da05414255989e328c0c20fbd492",
+    "/js/admin/create-data.js": "/js/admin/create-data.js?id=6b614ae77a9aaaecea32830b2aa8b7b0",
+    "/js/admin/listing.js": "/js/admin/listing.js?id=a1c05d78e416d1acf11eabc232bf46c3",
+    "/js/admin/category.js": "/js/admin/category.js?id=29afe1d495711226330fe8d4ff3ce062",
+    "/js/admin/post.js": "/js/admin/post.js?id=b7c6413d2c01abfc37127dafd4d8571a",
+    "/js/admin/product.js": "/js/admin/product.js?id=b5ad5aa1c883eb96b52fb6e09c092867",
+    "/js/admin/setting.js": "/js/admin/setting.js?id=56aa347a0253643799c7ecbd781e47ba",
+    "/js/web/cart.js": "/js/web/cart.js?id=8a3e210013d7cb23687eacd0cef1feb7",
+    "/js/web/listing.js": "/js/web/listing.js?id=104cfa69e421489705754f926cbc4708",
+    "/js/web/web.js": "/js/web/web.js?id=ef3b15696d7421e99488fb3d4e4f945f"
 }

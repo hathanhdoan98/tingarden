@@ -69,9 +69,26 @@ function validateFormData() {
     return isValid;
 }
 
+/**
+ * 
+ * @param message 
+ * @returns string
+ */
+function getResponseMessage(message){
+    if(typeof message == 'object'){
+        for(let i in message){
+            if(typeof message[i] == 'object'){
+                return getResponseMessage(message[i]);
+            }
+            return message[i];
+        }
+    }
+    return message;
+}
 export {
     validateFormData,
     openCreateModal,
     closeCreateModal,
-    clearCreateData
+    clearCreateData,
+    getResponseMessage
 }

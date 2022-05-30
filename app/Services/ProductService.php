@@ -9,6 +9,7 @@ use App\Http\Services\UploadImageService;
 use App\Models\Product;
 use App\Repositories\ProductRepository;
 use App\Repositories\ImageRepository;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -63,6 +64,15 @@ class ProductService
         return $this->productRepository->paginateAllProduct(
             $searchCriteria
         );
+    }
+
+    /**
+     * @param array $ids
+     * @return Collection|null
+     */
+    public function getProductById(array $ids): ?Collection
+    {
+       return $this->productRepository->findProductByids($ids);
     }
 
     /**

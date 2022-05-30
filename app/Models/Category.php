@@ -45,5 +45,9 @@ class Category extends Model
     public function getImagesByIndex(array $indexs){
         return $this->images()->whereIn('index', $indexs)->get();
     }
+
+    public function products(){
+        return $this->hasMany(Product::class);
+    }
     
 }

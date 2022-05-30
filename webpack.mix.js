@@ -45,7 +45,8 @@ function compileFile(src, des){
 }
 
 let arrDir = [
-    ['resources/js/admin' , 'public/js/admin']
+    ['resources/js/admin' , 'public/js/admin'],
+    ['resources/js/web' , 'public/js/web'],
 ];
 
 arrDir.forEach(el => {

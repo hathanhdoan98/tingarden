@@ -3,23 +3,7 @@
     <div class="body-page bg-white">
         <div class="container">
             <div class="breadcumb">
-                <ol id="breadcrumb" itemscope itemtype="http://schema.org/BreadcrumbList">
-                    <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a itemprop="item" href="https://hasuflora.com/"><span itemprop="name"><i class="fa fa-home" aria-hidden="true"></i></span></a>
-                        <meta itemprop="position" content="1" />
-                    </li>
-                    <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a itemprop="item" href="https://hasuflora.com/san-pham"><span itemprop="name">Sản phẩm</span></a>
-                        <meta itemprop="position" content="2" />
-                    </li>
-                    <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a itemprop="item" href="https://hasuflora.com/bo-sinh-nhat"><span itemprop="name">Hoa bó</span></a>
-                        <meta itemprop="position" content="3" />
-                    </li>
-                    <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a itemprop="item" href="https://hasuflora.com/gia-1000000d-2000000d"><span itemprop="name">Giá 1.000.000đ - 2.000.000đ</span></a>
-                        <meta itemprop="position" content="4" />
-                    </li>
-                    <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a itemprop="item" href="https://hasuflora.com/bo-hoa-tulip-hbo-082-tulip-trang-ha-lan"><span itemprop="name">BÓ HOA TULIP HBO - 082 TULIP TRẮNG HÀ LAN</span></a>
-                        <meta itemprop="position" content="5" />
-                    </li>
-                </ol>
+                {{ Breadcrumbs::render('product', $product) }}
             </div>
             <div class="row">
                 <div class="col-md-12 col-sm-12 col-xs-12 fix-col-0">

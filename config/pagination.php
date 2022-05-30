@@ -10,5 +10,5 @@ return [
         'key' => 'created_at',
         'value' => 0,
     ],
-    'pagination_range' => 2,
+    'pagination_range' => 2,  // 1  2  current_page  4  5
 ];

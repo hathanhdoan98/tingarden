@@ -34,7 +34,7 @@ class CreateProductRequest extends ApiRequest
             ],
             'category_id' => 'nullable|exists:categories,id',
             'price' => 'bail|required|integer|min:0',
-            'sale_off_price' => 'bail|nullable|sometimes|integer|min:0',
+            'sale_off_price' => 'bail|nullable|sometimes|integer|min:0|max:'.\request()->price,
             'rate' => 'bail|nullable|sometimes|integer|min:0|max:5',
             'total_rate' => 'bail|nullable|sometimes|integer|min:0|max:5',
         ];

@@ -12,6 +12,10 @@ window._SORT_KEY = 'created_at';
 window._SORT_VAL = 0; //0:desc, 1: asc
 
 window._DEFAULT_IMAGE = '/images/default-image.png';
+window._SORT = {
+  desc: 0,
+  asc: 1
+};
 
 /***/ }),
 
@@ -30,6 +34,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "formatDate": () => (/* binding */ formatDate),
 /* harmony export */   "formatMoney": () => (/* binding */ formatMoney),
 /* harmony export */   "formatNumber": () => (/* binding */ formatNumber),
+/* harmony export */   "getResponseMessage": () => (/* binding */ getResponseMessage),
+/* harmony export */   "hideLoading": () => (/* binding */ hideLoading),
 /* harmony export */   "keyBy": () => (/* binding */ keyBy),
 /* harmony export */   "randomCharacter": () => (/* binding */ randomCharacter),
 /* harmony export */   "randomNumber": () => (/* binding */ randomNumber),
@@ -37,9 +43,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "removeAllErrorMessage": () => (/* binding */ removeAllErrorMessage),
 /* harmony export */   "removeArrayElement": () => (/* binding */ removeArrayElement),
 /* harmony export */   "setURLSearchParam": () => (/* binding */ setURLSearchParam),
+/* harmony export */   "showLoading": () => (/* binding */ showLoading),
 /* harmony export */   "showNotification": () => (/* binding */ showNotification),
 /* harmony export */   "sliceContent": () => (/* binding */ sliceContent)
 /* harmony export */ });
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+
 /**
  * Slug a string
  * @param slug
@@ -73,23 +82,23 @@ function createSlug(slug) {
 /**
  * Format number to money
  * @param value
+ * @param string|null currencyUnit
  * @return int|float
  */
 
 
 function formatMoney(value) {
-  if (value == '' || value == null) {
-    return 0;
-  }
-
-  var text = String(value).floatText();
-  var splice = String(text).split('.');
-  var result = String(splice[0]).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  var currencyUnit = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+  value = value ? value : 0;
+  var text = value.toString();
+  var splice = text.split('.');
+  var result = splice[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
   if (splice.length > 1) {
     result += '.' + splice[1].substr(0, 2);
   }
 
+  result = currencyUnit ? result + " " + currencyUnit.trim() : result;
   return result;
 }
 /**
@@ -303,6 +312,34 @@ function keyBy(key, arr) {
   });
   return result;
 }
+/**
+ * 
+ * @param message 
+ * @returns string
+ */
+
+
+function getResponseMessage(message) {
+  if (_typeof(message) == 'object') {
+    for (var i in message) {
+      if (_typeof(message[i]) == 'object') {
+        return getResponseMessage(message[i]);
+      }
+
+      return message[i];
+    }
+  }
+
+  return message;
+}
+
+function showLoading() {
+  $(".fa-spinner").css('display', 'inline-block');
+}
+
+function hideLoading() {
+  $(".fa-spinner").css('display', 'none');
+}
 
 
 
@@ -375,10 +412,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "clearCreateData": () => (/* binding */ clearCreateData),
 /* harmony export */   "closeCreateModal": () => (/* binding */ closeCreateModal),
+/* harmony export */   "getResponseMessage": () => (/* binding */ getResponseMessage),
 /* harmony export */   "openCreateModal": () => (/* binding */ openCreateModal),
 /* harmony export */   "validateFormData": () => (/* binding */ validateFormData)
 /* harmony export */ });
 /* harmony import */ var _common_helper_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../common/helper.js */ "./resources/js/common/helper.js");
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+
 
 
 __webpack_require__(/*! ../common/define.js */ "./resources/js/common/define.js"); // =========================FUNCTION=============================
@@ -449,6 +489,26 @@ function validateFormData() {
     }
   });
   return isValid;
+}
+/**
+ * 
+ * @param message 
+ * @returns string
+ */
+
+
+function getResponseMessage(message) {
+  if (_typeof(message) == 'object') {
+    for (var i in message) {
+      if (_typeof(message[i]) == 'object') {
+        return getResponseMessage(message[i]);
+      }
+
+      return message[i];
+    }
+  }
+
+  return message;
 }
 
 

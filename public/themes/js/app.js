@@ -371,40 +371,40 @@ $(function() {
 
         });
     });
-    $('body').on('click', '.js-btnAddToCart', function() {
-        var pid = $(this).data('id');
-        var qty = $(this).data('qty');
-        var price = $(this).data('price');
-        var color = $(this).data('color');
-        var size = $(this).data('size');
-        var material = $(this).data('material');
+    // $('body').on('click', '.js-btnAddToCart', function() {
+    //     var pid = $(this).data('id');
+    //     var qty = $(this).data('qty');
+    //     var price = $(this).data('price');
+    //     var color = $(this).data('color');
+    //     var size = $(this).data('size');
+    //     var material = $(this).data('material');
 
-        var params = {
-            pid: parseInt(pid),
-            qty: parseInt(qty),
-            price: parseInt(price),
-            color: parseInt(color),
-            size: parseInt(size),
-            material: parseInt(material)
-        }
-        $.ajax({
-            url: 'ajax/addCart.php',
-            type: 'POST',
-            cache: !1,
-            dataType: 'json',
-            data: params,
-            async: true,
-            beforeSend: () => {},
-            error: function() {
-                alert('sss');
-            },
-            success: (data) => {
-                GLOBAL.showToastr(lang.mua_thanh_cong, 'success');
-                $('#view-header').html(data.totalCart);
-            }
+    //     var params = {
+    //         pid: parseInt(pid),
+    //         qty: parseInt(qty),
+    //         price: parseInt(price),
+    //         color: parseInt(color),
+    //         size: parseInt(size),
+    //         material: parseInt(material)
+    //     }
+    //     $.ajax({
+    //         url: 'ajax/addCart.php',
+    //         type: 'POST',
+    //         cache: !1,
+    //         dataType: 'json',
+    //         data: params,
+    //         async: true,
+    //         beforeSend: () => {},
+    //         error: function() {
+    //             alert('sss');
+    //         },
+    //         success: (data) => {
+    //             GLOBAL.showToastr(lang.mua_thanh_cong, 'success');
+    //             $('#view-header').html(data.totalCart);
+    //         }
 
-        });
-    });
+    //     });
+    // });
     $('body').on('click', '.buyCart', function() {
         var sl = $('#qty').val(),
             id = $(this).data('id'),
@@ -475,76 +475,6 @@ $(function() {
                 window.location.reload(true);
             }
         });
-    });
-    $('body').on('click', '.btn-minus', function(e) {
-        e.preventDefault();
-        var $that = $(this),
-            $number_cart = $that.next('input[name="quantity"]'),
-            id = $that.next('input[name="quantity"]').attr('current-id'),
-            price = $that.next('input[name="quantity"]').attr('data-price'),
-            color = $that.next('input[name="quantity"]').attr('data-color'),
-            size = $that.next('input[name="quantity"]').attr('data-size'),
-            material = $that.next('input[name="quantity"]').attr('data-material'),
-            currentVal = parseInt($number_cart.val());
-
-        if (currentVal > 1) {
-            var number_change = currentVal - 1;
-            $($number_cart).val(number_change);
-            $.ajax({
-                url: 'ajax/updateCart.php',
-                type: 'POST',
-                data: {
-                    pid: parseInt(id),
-                    qty: parseInt(number_change),
-                    price: parseInt(price),
-                    color: parseInt(color),
-                    size: parseInt(size),
-                    material: parseInt(material)
-                },
-                dataType: 'json',
-
-                success: function(res) {
-
-                    window.location.href = 'gio-hang.html';
-
-                }
-            });
-        }
-    });
-    $('body').on('click', '.btn-plus', function(e) {
-        var $that = $(this),
-            $number_cart = $that.prev('input[name="quantity"]'),
-            id = $that.prev('input[name="quantity"]').attr('current-id'),
-            price = $that.prev('input[name="quantity"]').attr('data-price'),
-            color = $that.prev('input[name="quantity"]').attr('data-color'),
-            size = $that.prev('input[name="quantity"]').attr('data-size'),
-            material = $that.prev('input[name="quantity"]').attr('data-material'),
-            currentVal = parseInt($number_cart.val());
-
-
-        if (currentVal < 999) {
-            var number_change = currentVal + 1;
-            $($number_cart).val(number_change);
-            $.ajax({
-                url: 'ajax/updateCart.php',
-                type: 'POST',
-                data: {
-                    pid: parseInt(id),
-                    qty: parseInt(number_change),
-                    price: parseInt(price),
-                    color: parseInt(color),
-                    size: parseInt(size),
-                    material: parseInt(material)
-                },
-                dataType: 'json',
-
-                success: function(res) {
-
-                    window.location.href = 'gio-hang.html';
-
-                }
-            });
-        }
     });
     // addwishlist
     $(".addwishlist").click(function(event) {
