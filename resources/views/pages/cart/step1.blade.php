@@ -113,7 +113,7 @@
             </table>
         </div>
         <div class="button-block ds-mobile mt-10">
-            <a class="step-footer-previous-link" href="san-pham" style="color: #338dbc;">
+            <a class="step-footer-previous-link" href="tat-ca" style="color: #338dbc;">
                 <button type="submit" class="btn btn--buy-now btn--buy-now-x2 w-100i">Tiếp tục mua
                     hàng&nbsp;&nbsp;<i class="fa fa-caret-right" aria-hidden="true"></i></button>
             </a>

@@ -42,7 +42,7 @@ class CartService
     {
         $carts = \request()->session()->get('carts', []);
         if($carts){
-            $products = $this->productService->getProductById(array_keys($carts))->toArray();
+            $products = $this->productService->getProductById(array_keys($carts), config('common.status.active'))->toArray();
             if($products){
                 foreach($products as $product){
                     $result[] = [
@@ -86,5 +86,13 @@ class CartService
         }
         \request()->session()->put('carts', $carts);
         return array_sum($carts);
+    }
+
+    /**
+     * Remove all products in cart
+     */
+    public function destroyCart(): void
+    {
+        \request()->session()->forget('carts');
     }
 }

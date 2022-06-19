@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Cart;
 
 use App\Http\Requests\ApiRequest;
+use Illuminate\Validation\Rule;
 
 class AddToCartRequest extends ApiRequest
 {
@@ -24,8 +25,21 @@ class AddToCartRequest extends ApiRequest
     public function rules()
     {
         return [
-            'product_id' => 'required|integer',
+            'product_id' => [
+                'required',
+                'integer',
+                Rule::exists('products','id')->where(function($q){
+                    return $q->where('status', config('common.status.active'));
+                })
+            ],
             'quantity' => 'required|integer|min:1|max:999',
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'product_id.exists' => 'Sản phẩm này không còn được bán'
         ];
     }
 }

@@ -106,4 +106,6 @@ var lang = {
 
     'chon_quan_huyen': 'Vui lòng chọn quận huyện',
 
+    'chon_phuong_xa' : 'Vui lòng chọn phường xã'
+
 };

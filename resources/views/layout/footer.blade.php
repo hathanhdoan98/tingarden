@@ -40,24 +40,30 @@
                             <h1><span style="font-size:22px;"><span style="color:#000000;"><strong>HASU FLORA</strong></span></span>
                             </h1>
 
-                            <p><span style="font-size:16px;"><span style="line-height:1.5;"><span style="color:#000000;"><strong><span style="font-family:arial,helvetica,sans-serif;">Địa chỉ:  </span><span style="font-family: &quot;Segoe UI Historic&quot;, &quot;Segoe UI&quot;, Helvetica, Arial, sans-serif; white-space: pre-wrap;">67 Thủ Khoa Huân, P. Bến Thành, Q1, TP Hồ Chí Minh</span></strong>
+                            <p><span style="font-size:16px;"><span style="line-height:1.5;"><span style="color:#000000;"><strong><span style="font-family:arial,helvetica,sans-serif;">Địa chỉ 1:  </span><span style="font-family: &quot;Segoe UI Historic&quot;, &quot;Segoe UI&quot;, Helvetica, Arial, sans-serif; white-space: pre-wrap;">{{ $settings['address1']['value'] ?? '' }}</span></strong>
                                     </span>
                                     </span>
                                     </span>
                             </p>
+
+                            <p><span style="font-size:16px;"><span style="line-height:1.5;"><span style="color:#000000;"><strong><span style="font-family:arial,helvetica,sans-serif;">Địa chỉ 2:  </span><span style="font-family: &quot;Segoe UI Historic&quot;, &quot;Segoe UI&quot;, Helvetica, Arial, sans-serif; white-space: pre-wrap;">{{ $settings['address2']['value'] ?? '' }}</span></strong>
+                            </span>
+                            </span>
+                            </span>
+                    </p>
 
                             <p><span style="font-size:16px;"><span style="line-height:1.5;"><span style="color:#000000;"><strong><span style="font-family:arial,helvetica,sans-serif;">Phone: </span></strong>
-                                    </span><strong><span style="font-family:arial,helvetica,sans-serif;">07989 12 383</span></strong></span>
+                                    </span><strong><span style="font-family:arial,helvetica,sans-serif;">{{ $settings['phone']['value'] ?? '' }}</span></strong></span>
                                     </span>
                             </p>
 
-                            <p><span style="font-size:16px;"><span style="line-height:1.5;"><span style="color:#000000;"><strong><span style="font-family:arial,helvetica,sans-serif;">Email: hasuflora@gmail.com</span></strong>
+                            <p><span style="font-size:16px;"><span style="line-height:1.5;"><span style="color:#000000;"><strong><span style="font-family:arial,helvetica,sans-serif;">Email: {{ $settings['email']['value'] ?? '' }}</span></strong>
                                     </span>
                                     </span>
                                     </span>
                             </p>
 
-                            <p><span style="font-size:16px;"><span style="line-height:1.5;"><span style="color:#000000;"><strong><span style="font-family:arial,helvetica,sans-serif;">Website: hasuflora.com</span></strong>
+                            <p><span style="font-size:16px;"><span style="line-height:1.5;"><span style="color:#000000;"><strong><span style="font-family:arial,helvetica,sans-serif;">Website: {{ $_SERVER['HTTP_HOST'] }}</span></strong>
                                     </span>
                                     </span>
                                     </span>
@@ -144,7 +150,7 @@
                             <div class="mt-10">
                                 <ul class="socical ds-flex flex-align-center mg-0">
                                     <li class="pd-5"><a href="" rel="nofollow" title=""><img src="upload/hinhanh/y-9650.png" alt="" "/></a></li>
-                                    <li class="pd-5"><a href="" rel="nofollow" title=""><img src="upload/hinhanh/f-5931.png" alt="" "/></a></li>
+                                    <li class="pd-5"><a href="{{ $settings['facebook_link']['value'] ?? '' }}" rel="nofollow" title=""><img src="upload/hinhanh/f-5931.png" alt="" "/></a></li>
                                     <li class="pd-5"><a href="" rel="nofollow" title=""><img src="upload/hinhanh/in-744.png" alt="" "/></a></li>
                                 </ul>
                             </div>
@@ -167,9 +173,9 @@
                         </div>
 
                         <div class="desc-footer mt-20">
-                            <div class="fb-page" data-href="https://www.facebook.com/HasuFlora" data-width="500" data-height="200" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true" data-show-posts="true">
+                            <div class="fb-page" data-href="{{ $settings['facebook_link']['value'] ?? '' }}" data-width="500" data-height="200" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true" data-show-posts="true">
                                 <div class="fb-xfbml-parse-ignore">
-                                    <blockquote cite="https://www.facebook.com/HasuFlora"><a href="https://www.facebook.com/HasuFlora">HASU FLORA</a>
+                                    <blockquote cite="{{ $settings['facebook_link']['value'] ?? '' }}"><a href="{{ $settings['facebook_link']['value'] ?? '' }}">Tin garden</a>
                                     </blockquote>
                                 </div>
                             </div>

@@ -282,4 +282,13 @@ abstract class AbstractEloquentRepository implements BaseRepository
     public function getFillableProperties(): array{
         return $this->model->getFillable();
     }
+
+    /**
+     * @param array $data
+     * @return bool
+     */
+    public function insertMany($data = []): bool{
+        return $this->model->insert($data);
+    }
+    
 }

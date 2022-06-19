@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\Address\AddressController;
+use App\Http\Controllers\Api\Order\OrderController;
 use App\Http\Controllers\Web\CartController;
 use App\Http\Controllers\Web\ListingController;
 use Illuminate\Support\Facades\Route;
@@ -19,12 +21,11 @@ Route::group(['namespace' => 'Web'], function () {
         return view('mail.new-order');
     });
     Route::get('/cart', 'WebController@getCart')->name('cart');
+    Route::get('/tat-ca', 'WebController@getAllProducts')->name('all_products');
     Route::get('/{alias?}', 'WebController@index')->name('home');
 });
 
-Route::get('/detail', function () {
-    return view('pages.product-detail');
-});
+
 
 Route::get('/contact', function () {
     return view('pages.contact');
@@ -50,4 +51,13 @@ Route::group(['prefix'=>'cart'], function (){
 
 Route::group(['prefix'=>'listing'], function (){
     Route::get('/get-products', [ListingController::class,'getProducts'])->name('listing.get-products');
+});
+
+Route::group(['prefix'=>'address'], function (){
+    Route::get('/get-districts/{provinceCode}', [AddressController::class,'getDistricts'])->name('web.address.get-districts');
+    Route::get('/get-wards/{districtCode}', [AddressController::class,'getWards'])->name('web.address.get-wards');
+});
+
+Route::group(['prefix'=>'order'], function (){
+    Route::post('/create', [OrderController::class,'createOrder'])->name('web.order.create');
 });

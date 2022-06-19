@@ -16,9 +16,10 @@ class Order extends Model
         'code',
         'note',
         'total_price',
+        'sub_total_price',
         'discount_price',
-        'sub_charge',          // phụ phí
-        'payment_total_price', // Tổng tiền phải thanh toán
+        'shipping_fee',   
+        'payment_total_price',
         'status',
     ];
     public $timestamps = true;

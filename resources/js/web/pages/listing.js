@@ -37,7 +37,7 @@ $(document).delegate('#pagingPage li', 'click', function(e){
         var sortKey = sort[0];
         var sortValue = sort[1];
         var payload = {
-            category_id : categoryId ?categoryId : null,
+            category_id : categoryId ? categoryId : null,
             sort_key : sortKey ? sortKey : _SORT_KEY,
             sort_value : _SORT[sortValue] ? _SORT[sortValue] : _SORT_VAL,
             limit : limit ? limit : _LIMIT,

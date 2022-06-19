@@ -623,7 +623,69 @@ $(document).delegate('.remove-cart', 'click', function (e) {
 });
 $(document).delegate('.swiper-slide', 'click', function (e) {
   var step = $(this).index() + 1;
-  $('a[href="#step' + step + '"]').tab('show');
+
+  if (step == 1 || step == 2) {
+    $('a[href="#step' + step + '"]').tab('show');
+  }
+});
+$('#id_city').on('change', function () {
+  var provinceCode = $(this).val();
+  var api = apiGetDistricts.replace("#code#", provinceCode);
+  (0,_common_ajax_js__WEBPACK_IMPORTED_MODULE_0__.sendRequest)('GET', {}, api, function (response) {
+    var xhtml = '<option value="">Chọn quận huyện</option>';
+    response.data.forEach(function (element) {
+      xhtml += '<option value="' + element.district_code + '">' + element.name + '</option>';
+    });
+    $('#id_dist').html(xhtml).selectpicker("refresh");
+  });
+});
+$('#id_dist').on('change', function () {
+  var districtCode = $(this).val();
+  var api = apiGetWards.replace("#code#", districtCode);
+  (0,_common_ajax_js__WEBPACK_IMPORTED_MODULE_0__.sendRequest)('GET', {}, api, function (response) {
+    var xhtml = '<option value="">Chọn phường xã</option>';
+    response.data.forEach(function (element) {
+      xhtml += '<option value="' + element.ward_code + '">' + element.name + '</option>';
+    });
+    $('#id_ward').html(xhtml).selectpicker("refresh");
+  });
+});
+$('#xacnhan2').on('click', function () {
+  var products = [];
+  $('#ajaxLoadCart input[name="quantity"]').each(function () {
+    products.push({
+      id: $(this).attr('current-id'),
+      quantity: $(this).val()
+    });
+  });
+  console.log(products);
+
+  if (!products.length) {
+    GLOBAL.showToastr('Vui lòng chọn sản phẩm', 'error');
+    return;
+  }
+
+  var payload = {
+    customer: {
+      name: $('#ten').val(),
+      phone: $('#dienthoai').val(),
+      email: $('#email').val(),
+      address: $('#address').val(),
+      province_code: $('#id_city').val(),
+      district_code: $('#id_dist').val(),
+      ward_code: $('#id_ward').val()
+    },
+    products: products
+  };
+  (0,_common_ajax_js__WEBPACK_IMPORTED_MODULE_0__.sendRequest)('POST', payload, apiCreateOrder, function (response) {
+    $("#order-code").text(response.data.code);
+    $('a[href="#step4"]').tab('show');
+  }, function (response) {
+    response = response.responseJSON;
+    var messages = response.message ? response.message : 'Thất bại';
+    messages = (0,_common_helper_js__WEBPACK_IMPORTED_MODULE_1__.getResponseMessage)(messages);
+    GLOBAL.showToastr(messages, 'error');
+  });
 });
 })();
 

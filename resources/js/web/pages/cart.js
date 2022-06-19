@@ -10,15 +10,16 @@ import {
     hideLoading
 } from '../../common/helper.js';
 
-function loading(){
+function loading() {
     showLoading();
     $("#giohang").attr('disabled', true);
-    $("#giohang").css('opacity',"0.5");
+    $("#giohang").css('opacity', "0.5");
 }
-function stopLoading(){
+
+function stopLoading() {
     hideLoading();
     $("#giohang").attr('disabled', false);
-    $("#giohang").css('opacity',"1");
+    $("#giohang").css('opacity', "1");
 }
 
 /**
@@ -28,8 +29,8 @@ function stopLoading(){
  * @param {int} subPrice 
  * @returns void
  */
-function syncDataStep(productId, quantity, subPrice){
-    $('tr[current-id="'+ productId +'"]').each(function(){
+function syncDataStep(productId, quantity, subPrice) {
+    $('tr[current-id="' + productId + '"]').each(function () {
         $(this).find("span.quantity").text(quantity);
         $(this).find("span.sub-price").text(formatMoney(subPrice));
     });
@@ -97,9 +98,9 @@ $(document).delegate('.btn-plus', 'click', function (e) {
 
 $(document).delegate('.update-sl', 'change', function (e) {
     var quantity = $(this).val();
-    if(quantity < 1 ){
+    if (quantity < 1) {
         quantity = 1
-    }else if(quantity > 999 ){
+    } else if (quantity > 999) {
         quantity = 999
     }
     $(this).val(quantity);
@@ -125,7 +126,7 @@ $(document).delegate('.remove-cart', 'click', function (e) {
             elm.closest('tr').remove();
             calculateTotalSubPrice();
             stopLoading();
-            $('tr[current-id="'+ productId +'"]').remove();
+            $('tr[current-id="' + productId + '"]').remove();
         },
         function (response) {
             response = response.responseJSON;
@@ -139,5 +140,81 @@ $(document).delegate('.remove-cart', 'click', function (e) {
 
 $(document).delegate('.swiper-slide', 'click', function (e) {
     var step = $(this).index() + 1;
-    $('a[href="#step' + step + '"]').tab('show');
+    if (step == 1 || step == 2) {
+        $('a[href="#step' + step + '"]').tab('show');
+    }
 })
+
+$('#id_city').on('change', function () {
+    var provinceCode = $(this).val();
+    var api = apiGetDistricts.replace("#code#", provinceCode);
+    sendRequest(
+        'GET', {},
+        api,
+        function (response) {
+            var xhtml = '<option value="">Chọn quận huyện</option>';
+            response.data.forEach(element => {
+                xhtml += '<option value="' + element.district_code + '">' + element.name + '</option>'
+            });
+            $('#id_dist').html(xhtml).selectpicker("refresh");
+        }
+    )
+});
+
+$('#id_dist').on('change', function () {
+    var districtCode = $(this).val();
+    var api = apiGetWards.replace("#code#", districtCode);
+    sendRequest(
+        'GET', {},
+        api,
+        function (response) {
+            var xhtml = '<option value="">Chọn phường xã</option>';
+            response.data.forEach(element => {
+                xhtml += '<option value="' + element.ward_code + '">' + element.name + '</option>'
+            });
+            $('#id_ward').html(xhtml).selectpicker("refresh");
+        }
+    )
+});
+
+$('#xacnhan2').on('click', function () {
+    var products = [];
+    $('#ajaxLoadCart input[name="quantity"]').each(function () {
+        products.push({
+            id: $(this).attr('current-id'),
+            quantity: $(this).val()
+        });
+    });
+    console.log(products);
+    if (!products.length) {
+        GLOBAL.showToastr('Vui lòng chọn sản phẩm', 'error');
+        return;
+    }
+    var payload = {
+        customer: {
+            name: $('#ten').val(),
+            phone: $('#dienthoai').val(),
+            email: $('#email').val(),
+            address: $('#address').val(),
+            province_code: $('#id_city').val(),
+            district_code: $('#id_dist').val(),
+            ward_code: $('#id_ward').val(),
+        },
+        products: products
+    }
+    sendRequest(
+        'POST',
+        payload,
+        apiCreateOrder,
+        function (response) {
+            $("#order-code").text(response.data.code);
+            $('a[href="#step4"]').tab('show');
+        },
+        function (response) {
+            response = response.responseJSON;
+            var messages = response.message ? response.message : 'Thất bại';
+            messages = getResponseMessage(messages);
+            GLOBAL.showToastr(messages, 'error');
+        }
+    )
+});

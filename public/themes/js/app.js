@@ -24,8 +24,8 @@ $(function() {
     $('#giohang').click(function() {
         $('a[href="#step2"]').tab('show');
     });
-    $('#xacnhan1').click(function() {
-
+    $('#xacnhan1, a[href="#step3"]').click(function(e) {
+        e.preventDefault();
         var $id_user = $('input[name="id_user"]').val();
 
         var $t = $('input[name="fullname"]').val();
@@ -40,6 +40,8 @@ $(function() {
 
         var $u = $('select[name="id_dist"]').val();
 
+        var $w = $('select[name="id_ward"]').val();
+
         var $x = $('textarea[name="description"]').val();
 
         var $y = $('input[name="giaohang"]:checked').val();
@@ -48,109 +50,12 @@ $(function() {
 
         var $z = $('input[name="httt"]:checked').val();
 
-        var $el = check_order($t, $n, $r, $d, $f, $u);
+        var $el = check_order($t, $n, $r, $d, $f, $u, $w);
         if ($el) {
-            $.ajax({
-                url: 'ajax/hoan-tat-dat-hang.php',
-                data: {
-                    id_user: $id_user,
-                    t: $t,
-                    n: $n,
-                    r: $r,
-                    d: $d,
-                    f: $f,
-                    u: $u,
-                    x: $x,
-                    y: $y,
-                    k: $k,
-                    z: $z
-                },
-                type: 'POST',
-                dataType: 'json',
-                cache: !1,
-                async: true,
-                error: function() {
-                    GLOBAL.showToastr(lang.loi_he_thong);
-                },
-                success: function(C) {
-                    $('#ajaxJson').html('<div class="row">\
-                                <div class="col-md-5 col-sm-5 col-xs-5 border-col pd-col">\
-                                    Họ và tên\
-                                </div>\
-                                <div class="col-md-7 col-sm-7 col-xs-7 border-col pd-col">\
-                                    ' + C.fullname + '\
-                                </div>\
-                                <div class="col-md-5 col-sm-5 col-xs-5 border-col pd-col">\
-                                    Số điện thoại\
-                                </div>\
-                                <div class="col-md-7 col-sm-7 col-xs-7 border-col pd-col">\
-                                    ' + C.phone + '\
-                                </div>\
-                                <div class="col-md-5 col-sm-5 col-xs-5 border-col pd-col">\
-                                    Email\
-                                </div>\
-                                <div class="col-md-7 col-sm-7 col-xs-7 border-col pd-col">\
-                                    ' + C.email + '\
-                                </div>\
-                                <div class="col-md-5 col-sm-5 col-xs-5 border-col pd-col">\
-                                    Địa chỉ\
-                                </div>\
-                                <div class="col-md-7 col-sm-7 col-xs-7 border-col pd-col">\
-                                    ' + C.address + '\
-                                </div>\
-                                <div class="col-md-5 col-sm-5 col-xs-5 border-col pd-col">\
-                                    Tỉnh/thành phố\
-                                </div>\
-                                <div class="col-md-7 col-sm-7 col-xs-7 border-col pd-col">\
-                                    ' + C.citytext + '\
-                                </div>\
-                                <div class="col-md-5 col-sm-5 col-xs-5 border-col pd-col">\
-                                    Quận huyện\
-                                </div>\
-                                <div class="col-md-7 col-sm-7 col-xs-7 border-col pd-col">\
-                                    ' + C.disttext + '\
-                                </div>\
-                                <div class="col-md-5 col-sm-5 col-xs-5 pd-col">\
-                                   Nội dung\
-                                </div>\
-                                <div class="col-md-7 col-sm-7 col-xs-7 pd-col">\
-                                    ' + C.description + '\
-                                </div>\
-                            </div>');
-                    $('#ajax-giaohang').html(C.deliverytext);
-                    $('#ajax-thanhtoan').html(
-                        '<img src="images/paypal' + C.payments + '.png" alt="' + lang.phuong_thuc_thanh_toan + '"/> ' + C.paymentstext
-                    );
-                    $('a[href="#step3"]').tab('show');
-                }
-            });
+            $('a[href="#step3"]').tab('show');
         }
     });
-    $('#xacnhan2').on('click', function() {
-        $.ajax({
-            url: 'ajax/send-mail.php',
-            type: 'POST',
-            data: {},
-            dataType: 'json',
-            cache: !1,
-            async: true,
-            beforeSend: function() {
-
-            },
-            error: function() {
-                GLOBAL.showToastr(lang.loi_he_thong);
-            },
-            success: function(C) {
-                if (C.error == 200) {
-                    $('#order-code').html(C.code);
-                    $('#order-phone').html(C.phone);
-                    $('#order-email').html(C.email);
-                    $('.num-cart').html(C.total);
-                    $('a[href="#step4"]').tab('show');
-                }
-            }
-        });
-    });
+    
     $('#payOnline').click(function() {
         var $id_user = $('input[name="id_user"]').val();
 
@@ -204,10 +109,6 @@ $(function() {
     });
     $('a[role="tab"]').click(function(j) {
         j.preventDefault()
-    });
-    $('#id_city').on('change', function() {
-        var j = $(this).val();
-        ajaxPage(j, 'loadDist.php', '#id_dist');
     });
     $('#add-product-list').click(function() {
         var product_id = $(this).data('product-id');
@@ -321,134 +222,7 @@ $(function() {
             });
         }
     });
-    $('body').on('click', '.btnAddToCart', function() {
-        var sl = $('#qty').val(),
-            id = $(this).data('id'),
-            price = $(this).data('price'),
-            advance = $(this).data('cart-advance'),
-            color = $('input[name="color"]:checked').val(),
-            size = $('input[name="size"]:checked').val(),
-            material = $('input[name="material"]:checked').val();
-        // if(advance==='yes'){
-        //     if(color==undefined || color==''){
-        //         GLOBAL.showToastr('Vui lòng chọn màu sắc!','error');
-        //         return false;
-        //     }
-        //     if(size==undefined || size==''){
-        //         GLOBAL.showToastr('Vui lòng chọn size!','error');
-        //         return false;
-        //     }
-        //     if(material==undefined || material==''){
-        //         GLOBAL.showToastr('Vui lòng chọn chất liệu!','error');
-        //         return false;
-        //     }
-        // }
 
-        var params = {
-            pid: parseInt(id),
-            qty: parseInt(sl),
-            price: parseInt(price),
-            color: parseInt(color),
-            size: parseInt(size),
-            material: parseInt(material)
-        }
-        $.ajax({
-            url: 'ajax/addCart.php',
-            type: 'POST',
-            cache: !1,
-            dataType: 'json',
-            data: params,
-            async: true,
-            beforeSend: () => {},
-            error: function() {
-                GLOBAL.showToastr('Thêm giỏ hàng thất bại', 'error');
-            },
-            success: (data) => {
-                GLOBAL.showToastr(lang.mua_thanh_cong, 'success');
-                $('#view-header').html(data.totalCart);
-                $('.mask-num').html(data.totalCart);
-            }
-
-        });
-    });
-    // $('body').on('click', '.js-btnAddToCart', function() {
-    //     var pid = $(this).data('id');
-    //     var qty = $(this).data('qty');
-    //     var price = $(this).data('price');
-    //     var color = $(this).data('color');
-    //     var size = $(this).data('size');
-    //     var material = $(this).data('material');
-
-    //     var params = {
-    //         pid: parseInt(pid),
-    //         qty: parseInt(qty),
-    //         price: parseInt(price),
-    //         color: parseInt(color),
-    //         size: parseInt(size),
-    //         material: parseInt(material)
-    //     }
-    //     $.ajax({
-    //         url: 'ajax/addCart.php',
-    //         type: 'POST',
-    //         cache: !1,
-    //         dataType: 'json',
-    //         data: params,
-    //         async: true,
-    //         beforeSend: () => {},
-    //         error: function() {
-    //             alert('sss');
-    //         },
-    //         success: (data) => {
-    //             GLOBAL.showToastr(lang.mua_thanh_cong, 'success');
-    //             $('#view-header').html(data.totalCart);
-    //         }
-
-    //     });
-    // });
-    $('body').on('click', '.buyCart', function() {
-        var sl = $('#qty').val(),
-            id = $(this).data('id'),
-            price = $(this).data('price'),
-            advance = $(this).data('cart-advance'),
-            color = $('input[name="color"]:checked').val(),
-            size = $('input[name="size"]:checked').val(),
-            material = $('input[name="material"]:checked').val();
-        // if(advance==='yes'){
-        //     if(color==undefined || color==''){
-        //         GLOBAL.showToastr('Vui lòng chọn màu sắc!','error');
-        //         return false;
-        //     }
-        //     if(size==undefined || size==''){
-        //         GLOBAL.showToastr('Vui lòng chọn size!','error');
-        //         return false;
-        //     }
-        //     if(material==undefined || material==''){
-        //         GLOBAL.showToastr('Vui lòng chọn chất liệu!','error');
-        //         return false;
-        //     }
-        // }
-        var params = {
-            pid: parseInt(id),
-            qty: parseInt(sl),
-            price: parseInt(price),
-            color: parseInt(color),
-            size: parseInt(size),
-            material: parseInt(material)
-        }
-        $.ajax({
-            url: 'ajax/addCart.php',
-            type: 'POST',
-            cache: !1,
-            dataType: 'json',
-            data: params,
-            async: true,
-            beforeSend: () => {},
-            success: (data) => {
-                window.location.href = "gio-hang.html"
-            }
-
-        });
-    });
     $('body').on('click', '.delcart', function() {
         var id = $(this).data('id');
         var qty = $(this).data('qty');

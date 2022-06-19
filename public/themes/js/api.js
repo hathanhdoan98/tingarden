@@ -146,10 +146,6 @@ GLOBAL.preLoader = () => {
         };
         $.ajax(params);
     });
-    $('#id_city').on('change', function() {
-        var j = $(this).val();
-        ajaxPage(j, 'load_quan.php', '#id_dist');
-    });
 }
 GLOBAL.dataTable = () => {
     loadCSS(baseUrl + "themes/datatable/jquery.dataTables.min.css");
@@ -1303,15 +1299,15 @@ GLOBAL.sortChange = () => {
     });
 }
 GLOBAL.searchPage = () => {
-    $('button.button-search').click(function() {
-        var t = $('#keywords');
-        searchEnter(t);
-    });
-    $('#keywords').keypress(function(e) {
-        if (e.which == 13) {
-            searchEnter($(this));
-        }
-    });
+    // $('button.button-search').click(function() {
+    //     var t = $('#keywords');
+    //     searchEnter(t);
+    // });
+    // $('#keywords').keypress(function(e) {
+    //     if (e.which == 13) {
+    //         searchEnter($(this));
+    //     }
+    // });
 }
 GLOBAL.localStore = () => {
     $('body').on('click', '.color-themes-page li', function(event) {

@@ -871,7 +871,7 @@
             <span>
                 <img src="images/message/phone.png" alt="Phone"/>
             </span>
-            <p>Call 07989 12 383</p>
+            <p>Call {{ $settings["phone"]["value"] ?? "" }}</p>
         </a>
     </div>
     <div class="arcontactus-message-button" style="background-color: var(--html-bg-website)">
@@ -1020,7 +1020,7 @@
         var arcItem = {};
         arcItem.id = 'msg-item-8';
         arcItem.class = 'msg-item-phone';
-        arcItem.title = 'Call 07989 12 383';
+        arcItem.title = 'Call {{ $settings["phone"]["value"] ?? "" }}';
         arcItem.icon = '<img src="images/message/phone.png" alt="Phone"/>';
         arcItem.href = 'tel:0123123';
         arcItem.color = '';
@@ -1037,7 +1037,7 @@
     <span class="locality">10.6885418,106.6034837</span>
     <span class="postal-code">700000</span>
     <span class="country-name">Việt Nam</span>
-    <span class="tel">07989 12 383</span>
+    <span class="tel">{{ $settings["phone"]["value"] ?? "" }}</span>
 </address>
 <script>
     var apiAddToCart = "{{ route('web.cart.add') }}";

@@ -1,7 +1,7 @@
 <div class="step-content-item step-item-4">
     <div class="col-md-6 col-sm-6 col-xs-12">
         <div class="image-success t-center">
-            <img src="images/success.png" alt="Hoàn tất">
+            <img src="images/thanks.jpg" alt="Hoàn tất">
         </div>
     </div>
     <div class="col-md-6 col-sm-6 col-xs-12">
@@ -9,7 +9,7 @@
             <h3>ĐẶT HÀNG THÀNH CÔNG</h3>
         </div>
         <div class="info-order mt-30">
-            <p>Mã đơn hàng của bạn là: <b><span style="color:#737d83;font-size:20px" id="order-code"></span></b></p>
+            <p>Mã đơn hàng của bạn là: <b><span style="color:red;font-size:20px" id="order-code"></span></b></p>
             <p>Hiện tại đơn hàng của bạn đang được xử lý.</p>
             <p>Thông tin chi tiết đơn hàng sẽ được gửi đến hộp thư của bạn:<b id="order-email"></b></p>
         </div>

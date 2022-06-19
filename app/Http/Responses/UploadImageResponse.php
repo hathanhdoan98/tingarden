@@ -18,7 +18,7 @@ class UploadImageResponse{
     }
 
     public function getMessage(): string{
-        return !empty($this->message) ? $this->message : config("upload.response_message.$this->response_code");
+        return !empty($this->message) ? $this->message : config("upload.response_message.$this->response_code", "Thất bại");
     }
 
     public function getData(): array{

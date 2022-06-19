@@ -48,4 +48,12 @@ class Product extends Model
     public function getImagesByIndex(array $indexs){
         return $this->images()->whereIn('index', $indexs)->get();
     }
+
+    public function scopeWithImages($query){
+        return $query->with([
+            'images' => function ($q) {
+                $q->orderBy('index', 'ASC');
+            }
+        ]);
+    }
 }

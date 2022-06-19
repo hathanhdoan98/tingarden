@@ -9,7 +9,7 @@ $toQuantity = ($pagination['current_page'] * $pagination['per_page']) >= $pagina
         <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="container">
                 <div class="breadcumb">
-                    {{ Breadcrumbs::render('category', $category) }}
+                    {{ Breadcrumbs::render('category', $category ?? null) }}
                 </div>
                 <div class="row">
                     <div class="col-md-12 col-sm-12 col-xs-12 fix-col-0">
@@ -18,7 +18,7 @@ $toQuantity = ($pagination['current_page'] * $pagination['per_page']) >= $pagina
                                 <div class="col-md-12 col-sm-12 col-xs-12">
                                     <div class="title-default p-relative mb-10 t-center">
                                         <h1><a class="p-relative" href="javascript:"
-                                                title="Hoa bó">{{ $category['name'] }}</a></h1>
+                                                title="Hoa bó">{{ $category['name'] ?? 'Tất cả sản phẩm' }}</a></h1>
                                         <div class="bx-title"></div>
                                     </div>
                                 </div>
@@ -75,7 +75,7 @@ $toQuantity = ($pagination['current_page'] * $pagination['per_page']) >= $pagina
                                     </div>
                                 </div>
                                 <div class="product-list col-md-12 col-sm-12 col-xs-12">
-                                    @include('pages.category.product-list',[
+                                    @include('pages.products.product-list',[
                                         'productList' => $productList ?? [],
                                         'pagination' => $pagination ?? [],
                                     ])
@@ -91,7 +91,7 @@ $toQuantity = ($pagination['current_page'] * $pagination['per_page']) >= $pagina
 <script src="{{ asset('/js/web/listing.js') }}"></script>
 <script>
     var apiGetProducts = "{{ route('listing.get-products') }}";
-    var categoryId = {{ $category['id'] }};
+    var categoryId = "{{ $category['id'] ?? '' }}";
     var dataList = ".product-list";
 </script>
 @endsection

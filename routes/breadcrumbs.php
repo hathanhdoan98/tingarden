@@ -9,7 +9,11 @@ Breadcrumbs::for('home', function ($trail) {
 // Home > Category
 Breadcrumbs::for('category', function ($trail, $category) {
     $trail->parent('home');
-    $trail->push($category->name, route('home',$category->alias->alias ?? ''));
+    if($category){
+        $trail->push($category->name, route('home',$category->alias->alias ?? ''));
+    }else{
+        $trail->push('Tất cả', route('all_products'));
+    }
 });
 
 // Home > Category > Product

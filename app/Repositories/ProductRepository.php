@@ -40,15 +40,18 @@ class ProductRepository extends AbstractEloquentRepository
 
     /**
      * @param array $ids
+     * @param int|null $status
      * @return Collection|null
      */
-    public function findProductByids(array $ids): ?Collection
+    public function findProductByids(array $ids, ?int $status = null): ?Collection
     {
+        $filter = is_null($status) ? ['id' => $ids] : [
+            'id' => $ids,
+            'status' => $status,
+        ];
         return $this->findBy(
             [
-                'filter' => [
-                    'id' => $ids
-                ],
+                'filter' => $filter,
             ],
             function (Builder $builder) {
                 return $builder->with([

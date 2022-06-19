@@ -111,3 +111,11 @@ function curlRequest(string $url, string $method, array $data=[]){
     curl_close($curl);
     return $response;
 }
+
+/**
+ * Get current url
+ * @return string
+ */
+function getCurrentUrl(): string{
+    return (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+}

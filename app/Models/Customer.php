@@ -15,9 +15,9 @@ class Customer extends Model
         'email',
         'phone',
         'address',
-        'province_id',
-        'district_id',
-        'ward_id',
+        'province_code',
+        'district_code',
+        'ward_code',
         'status',
     ];
 

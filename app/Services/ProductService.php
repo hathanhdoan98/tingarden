@@ -9,6 +9,7 @@ use App\Http\Services\UploadImageService;
 use App\Models\Product;
 use App\Repositories\ProductRepository;
 use App\Repositories\ImageRepository;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
@@ -49,10 +50,10 @@ class ProductService
                 $filter[$key] = $value;
             }
         }
-        if(!empty($data['keyword'])){
+        if (!empty($data['keyword'])) {
             $filter['search'] = [
                 'operator' => 'LIKE',
-                'value' => "%". $data['keyword']. "%"
+                'value' => "%" . $data['keyword'] . "%"
             ];
         }
         $searchCriteria = [
@@ -70,9 +71,9 @@ class ProductService
      * @param array $ids
      * @return Collection|null
      */
-    public function getProductById(array $ids): ?Collection
+    public function getProductById(array $ids, ?int $status = null): ?Collection
     {
-       return $this->productRepository->findProductByids($ids);
+        return $this->productRepository->findProductByids($ids, $status);
     }
 
     /**
@@ -82,6 +83,46 @@ class ProductService
     public function findProduct(int $id): ?Model
     {
         return $this->productRepository->findProduct($id);
+    }
+
+    /**
+     * @param int $id
+     * @param int $categoryId
+     * @return array|null
+     */
+    public function getRelatedProducts(int $id, int $categoryId): ?array
+    {
+        $relatedProducts = $this->productRepository->findBy([
+            'filter' => [
+                'category_id' => $categoryId,
+                'id' => [
+                    'operator' => '!=',
+                    'value' => $id
+                ],
+                'status' => config('common.status.active')
+            ],
+            'limit' => 5,
+            'relations' => ['alias']
+        ], function (Builder $builder) {
+            $builder->withImages();
+        })->items();
+
+        if(count($relatedProducts) <5){
+            $others = $this->productRepository->findBy([
+                'filter' => [
+                    'category_id' => [
+                        'operator' => '!=',
+                        'value' => $categoryId
+                    ],
+                    'status' => config('common.status.active')
+                ],
+                'limit' => 5 - count($relatedProducts),
+                'relations' => ['alias']
+            ], function (Builder $builder) {
+                $builder->withImages();
+            })->items();
+        }
+        return array_merge($relatedProducts,$others);
     }
 
     /**

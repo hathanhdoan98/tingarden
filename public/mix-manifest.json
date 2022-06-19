@@ -6,7 +6,8 @@
     "/js/admin/post.js": "/js/admin/post.js?id=b7c6413d2c01abfc37127dafd4d8571a",
     "/js/admin/product.js": "/js/admin/product.js?id=b5ad5aa1c883eb96b52fb6e09c092867",
     "/js/admin/setting.js": "/js/admin/setting.js?id=56aa347a0253643799c7ecbd781e47ba",
-    "/js/web/cart.js": "/js/web/cart.js?id=8a3e210013d7cb23687eacd0cef1feb7",
+    "/js/web/cart.js": "/js/web/cart.js?id=43a6883755c11137ff4bbc2565ee7c87",
     "/js/web/listing.js": "/js/web/listing.js?id=104cfa69e421489705754f926cbc4708",
-    "/js/web/web.js": "/js/web/web.js?id=ef3b15696d7421e99488fb3d4e4f945f"
+    "/js/web/product-detail.js": "/js/web/product-detail.js?id=a8972f6d41cfc79e9319dd5d6c6c9abb",
+    "/js/web/web.js": "/js/web/web.js?id=84c55ba6f8ecc47601afc5db1ff634a7"
 }

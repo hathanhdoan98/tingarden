@@ -60,8 +60,16 @@
                                     <input name="email" value="{{ $settings['email']['value'] ?? '' }}" type="text" class="form-control">
                                 </div>
                                 <div class="form-group">
-                                    <label for="address" class="font-weight-bold">Địa chỉ</label>
-                                    <input name="address" value="{{ $settings['address']['value'] ?? '' }}" type="text" class="form-control">
+                                    <label for="address" class="font-weight-bold">Địa chỉ 1</label>
+                                    <input name="address1" value="{{ $settings['address1']['value'] ?? '' }}" type="text" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label for="address" class="font-weight-bold">Địa chỉ 2</label>
+                                    <input name="address2" value="{{ $settings['address2']['value'] ?? '' }}" type="text" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label for="address" class="font-weight-bold">Link facebook</label>
+                                    <input name="facebook_link" value="{{ $settings['facebook_link']['value'] ?? '' }}" type="text" class="form-control">
                                 </div>
                             </form>
                         </div>

@@ -6,8 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\Lib;
 use App\Http\Resources\ProductResource;
 use App\Http\Responses\PaginationResponse;
-use App\Models\Product;
-use App\Services\CartService;
 use App\Services\ProductService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -40,6 +38,7 @@ class ListingController extends Controller
                 $limit,
                 [
                     'category_id' => $categoryId,
+                    'status' => config('common.status.active')
                 ],
                 $sortKey,
                 $sortValue
@@ -49,7 +48,7 @@ class ListingController extends Controller
                 'productList' => ProductResource::collection($productList->items())->toArray(\request()),
                 'pagination' => PaginationResponse::getPagination($productList),
             ];
-            return $this->responseOK(view('pages.category.product-list', $data)->render());
+            return $this->responseOK(view('pages.products.product-list', $data)->render());
         } catch (\Exception $e) {
             return $this->responseError(Response::HTTP_INTERNAL_SERVER_ERROR, $e);
         }

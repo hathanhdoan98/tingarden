@@ -502,6 +502,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _common_helper_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../common/helper.js */ "./resources/js/common/helper.js");
 
 
+
+function searchProduct() {
+  if ($('#keywords').val()) {
+    window.location.href = '/tat-ca?keyword=' + $('#keywords').val();
+  } else {
+    GLOBAL.showToastr("Nhập từ khóa tìm kiếm", 'error');
+  }
+}
+
 $(document).delegate('.js-btnAddToCart', 'click', function (e) {
   var payload = {
     product_id: $(this).data('id'),
@@ -510,14 +519,24 @@ $(document).delegate('.js-btnAddToCart', 'click', function (e) {
 
   var successCallback = function successCallback(response) {
     $('#view-header').html(response.data.total_quantity);
-    (0,_common_helper_js__WEBPACK_IMPORTED_MODULE_1__.showNotification)('Đã thêm vào giỏ hàng', 'success');
+    GLOBAL.showToastr('Đã thêm vào giỏ hàng', 'success');
   };
 
   var errorCallback = function errorCallback(response) {
-    (0,_common_helper_js__WEBPACK_IMPORTED_MODULE_1__.showNotification)('Thất bại', 'danger');
+    response = response.responseJSON;
+    var message = response.message ? response.message : 'Thất bại';
+    GLOBAL.showToastr((0,_common_helper_js__WEBPACK_IMPORTED_MODULE_1__.getResponseMessage)(message), 'error');
   };
 
   (0,_common_ajax__WEBPACK_IMPORTED_MODULE_0__.sendRequest)('POST', payload, apiAddToCart, successCallback, errorCallback);
+});
+$(document).delegate('button.button-search', 'click', function (e) {
+  searchProduct();
+});
+$('#keywords').keypress(function (e) {
+  if (e.which == 13) {
+    searchProduct();
+  }
 });
 })();
 

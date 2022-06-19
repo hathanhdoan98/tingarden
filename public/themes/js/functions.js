@@ -203,65 +203,7 @@ function formatCurrency(number) {
     return number.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
 }
 
-function minus() {
-    var $that = $(this),
-        $number_cart = $('input[name="qty"]'),
-        size = $('input[name="size"]:checked').val(),
-        color = $('input[name="color"]:checked').val(),
-        material = $('input[name="weight"]:checked').val(),
-        currentVal = parseInt($number_cart.val());
-    if (currentVal > 1) {
-        var number_change = currentVal - 1;
-        $($number_cart).val(number_change);
-        $.ajax({
-            url: 'ajax/updateQty.php',
-            type: 'POST',
-            data: {
-                size: parseInt(size),
-                color: parseInt(color),
-                material: parseInt(material),
-                qty: parseInt(number_change)
-            },
-            dataType: 'json',
 
-            success: function(res) {
-
-                $('#price').html(res.priceText);
-
-            }
-        });
-    }
-}
-
-function plus() {
-    var $that = $(this),
-        size = $('input[name="size"]:checked').val(),
-        color = $('input[name="color"]:checked').val(),
-        material = $('input[name="weight"]:checked').val(),
-        $number_cart = $('input[name="qty"]'),
-        currentVal = parseInt($number_cart.val());
-    if (currentVal < 999) {
-        var number_change = currentVal + 1;
-        $($number_cart).val(number_change);
-        $.ajax({
-            url: 'ajax/updateQty.php',
-            type: 'POST',
-            data: {
-                size: parseInt(size),
-                color: parseInt(color),
-                material: parseInt(material),
-                qty: parseInt(number_change)
-            },
-            dataType: 'json',
-
-            success: function(res) {
-
-                $('#price').html(res.priceText);
-
-            }
-        });
-    }
-}
 
 function isBlank(a) {
     if (a.length == 0) {
@@ -282,7 +224,7 @@ function isValidPhone(a) {
     }
     return true
 }
-var check_order = (t, n, r, d, f, u) => {
+var check_order = (t, n, r, d, f, u, w) => {
     if (isBlank(t)) {
         GLOBAL.showToastr(lang.nhap_ho_ten, 'error');
         return false;
@@ -306,6 +248,9 @@ var check_order = (t, n, r, d, f, u) => {
         return false;
     } else if (isBlank(u)) {
         GLOBAL.showToastr(lang.chon_quan_huyen, 'error');
+        return false;
+    }else if (isBlank(w)) {
+        GLOBAL.showToastr(lang.chon_phuong_xa, 'error');
         return false;
     } else {
         return true;

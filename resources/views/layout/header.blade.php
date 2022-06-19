@@ -58,7 +58,7 @@ $totalCarts = array_sum($carts);
                                     <i class="fa fa-phone" aria-hidden="true"></i>
                                 </div>
                                 <div class="desc-call ml-10">
-                                    <div class="phone">07989 12 383</div>
+                                    <div class="phone">{{ $settings['phone']['value'] ?? '' }}</div>
                                 </div>
                             </div>
 
@@ -131,7 +131,7 @@ $totalCarts = array_sum($carts);
                         </div>
                         <ul class="ul-menu mg-0 none-mobile">
                             <li class=" p-relative">
-                                <a itemprop="url" href="all-product" title="Tất cả sản phẩm">
+                                <a itemprop="url" href="tat-ca" title="Tất cả sản phẩm">
                                     <span itemprop="name">Tất cả sản phẩm</span>
                                 </a>
                             </li>
@@ -204,7 +204,7 @@ $totalCarts = array_sum($carts);
                         <i class="fa fa-search none-mobile" aria-hidden="true"></i>
                         <div class="form-search ds-flex flex-end p-relative">
 
-                            <input type="text" name="keywords" id="keywords" value="" placeholder="Tìm kiếm...">
+                            <input type="text" name="keywords" id="keywords" value="{{ $_GET['keyword'] ?? '' }}" placeholder="Tìm kiếm...">
 
                             <button class="button-search" type="submit"><i class="fa fa-search"
                                     aria-hidden="true"></i></button>
